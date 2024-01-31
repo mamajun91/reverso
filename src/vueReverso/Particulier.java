@@ -203,16 +203,16 @@ public class Particulier extends JFrame {
         client.setId(CollectClient.listClient.size()+1);}
         CollectClient.listClient.add(
                 new Client(Integer.parseInt(iden.getText()),
-                RaisonSociale.getText(),
-                NumDeRue.getText(),
-                NomDeRue.getText(),
-                CodePostal.getText(),
-                Ville.getText(),
-                Telephone.getText(),
-                AdresseMail.getText(),
-                Commentaire.getText(),
-                Double.parseDouble(chiffreAffaire.getText()),
-                Integer.parseInt(nombreEmploye.getText())
+                        RaisonSociale.getText(),
+                        NumDeRue.getText(),
+                        NomDeRue.getText(),
+                        CodePostal.getText(),
+                        Ville.getText(),
+                        Telephone.getText(),
+                        AdresseMail.getText(),
+                        Commentaire.getText(),
+                        Double.parseDouble(chiffreAffaire.getText()),
+                        Integer.parseInt(nombreEmploye.getText())
                 )
         );
     }
