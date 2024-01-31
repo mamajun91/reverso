@@ -219,108 +219,82 @@ public class Particulier extends JFrame {
     public void AjouterProspect(){
         if (Objects.equals(prospect, new Prospect())) {
         prospect.setId(CollectProspect.listProspect.size()+1);}
-        CollectProspect.listProspect.add(
-                new Prospect(Integer.parseInt(iden.getText()),
-                        RaisonSociale.getText(),
-                        NumDeRue.getText(),
-                        NomDeRue.getText(),
-                        CodePostal.getText(),
-                        Ville.getText(),
-                        Telephone.getText(),
-                        AdresseMail.getText(),
-                        Commentaire.getText(),
-                        dateProspect.getText(),
-                        prospectInteret2.getText())
+        CollectProspect.listProspect.add(new Prospect(Integer.parseInt(iden.getText()),
+                RaisonSociale.getText(),
+                NumDeRue.getText(),
+                NomDeRue.getText(),
+                CodePostal.getText(),
+                Ville.getText(),
+                Telephone.getText(),
+                AdresseMail.getText(),
+                Commentaire.getText(),
+                dateProspect.getText(),
+                prospectInteret2.getText())
         );
     }
 
     public void SupCliPros(TypeSociete typeSociete){
         switch (typeSociete){
             case CLIENT -> {
+                dispose();
                 i = accueilForm.getComboBoxClient().getSelectedIndex();
                 CollectClient.listClient.remove(i-1);
-                dispose();
                 new SocieteForm().remplirSociete(TypeSociete.CLIENT);
             }
             case PROSPECT -> {
+                dispose();
                 j = accueilForm.getComboBoxProspect().getSelectedIndex();
                 CollectProspect.listProspect.remove(j-1);
-                dispose();
                 new SocieteForm().remplirSociete(TypeSociete.PROSPECT);
             }
         }
     }
-
-    public void valider(TypeSociete typeSociete, Crud crud){
-        switch (typeSociete){
-            case CLIENT -> {
-                switch (crud) {
-                    case AJOUTER -> {
-                        configAjouter(Crud.AJOUTER, TypeSociete.CLIENT);
-                        Ok.addActionListener(new ActionListener() {
-                            @Override
-                            public void actionPerformed(ActionEvent e) {
+    public void valider(TypeSociete typeSociete, Crud crud) {
+        Ok.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                switch (typeSociete) {
+                    case CLIENT -> {
+                        switch (crud) {
+                            case AJOUTER -> {
                                 dispose();
+                                configAjouter(Crud.AJOUTER, TypeSociete.CLIENT);
                                 AjouterClient();
                                 new SocieteForm().remplirSociete(TypeSociete.CLIENT);
                             }
-                        });
-                    }
-                    case MODIFIER -> {
-                        configAjouter(Crud.AJOUTER, TypeSociete.CLIENT);
-                        Ok.addActionListener(new ActionListener() {
-                            @Override
-                            public void actionPerformed(ActionEvent e) {
+                            case MODIFIER -> {
                                 AjouterClient();
+                                configAjouter(Crud.AJOUTER, TypeSociete.CLIENT);
                                 SupCliPros(TypeSociete.CLIENT);
                             }
-                        });
-                    }
-                    case SUPPRIMER -> {
-                        configAjouter(Crud.SUPPRIMER, TypeSociete.CLIENT);
-                        Ok.addActionListener(new ActionListener() {
-                            @Override
-                            public void actionPerformed(ActionEvent e) {
+                            case SUPPRIMER -> {
+                                configAjouter(Crud.SUPPRIMER, TypeSociete.CLIENT);
                                 SupCliPros(TypeSociete.CLIENT);
                             }
-                        });
+                        }
                     }
-                }
-            }
-            case PROSPECT -> {
-                switch (crud){
-                    case AJOUTER -> {
-                        configAjouter(Crud.AJOUTER,TypeSociete.PROSPECT);
-                        Ok.addActionListener(new ActionListener() {
-                            @Override
-                            public void actionPerformed(ActionEvent e) {
+                    case PROSPECT -> {
+                        switch (crud) {
+                            case AJOUTER -> {
                                 dispose();
                                 AjouterProspect();
-                                new SocieteForm().remplirSociete(TypeSociete.PROSPECT);}
-                        });
-                    }
-                    case MODIFIER -> {
-                        configAjouter(Crud.AJOUTER, TypeSociete.PROSPECT);
-                        Ok.addActionListener(new ActionListener() {
-                            @Override
-                            public void actionPerformed(ActionEvent e) {
+                                configAjouter(Crud.AJOUTER, TypeSociete.PROSPECT);
+                                new SocieteForm().remplirSociete(TypeSociete.PROSPECT);
+                            }
+                            case MODIFIER -> {
                                 AjouterProspect();
+                                configAjouter(Crud.AJOUTER, TypeSociete.PROSPECT);
                                 SupCliPros(TypeSociete.PROSPECT);
                             }
-                        });
-                    }
-                    case SUPPRIMER -> {
-                        configAjouter(Crud.SUPPRIMER, TypeSociete.PROSPECT);
-                        Ok.addActionListener(new ActionListener() {
-                            @Override
-                            public void actionPerformed(ActionEvent e) {
+                            case SUPPRIMER -> {
+                                configAjouter(Crud.SUPPRIMER, TypeSociete.PROSPECT);
                                 SupCliPros(TypeSociete.PROSPECT);
                             }
-                        });
+                        }
                     }
                 }
             }
-        }
+        });
     }
 }
 

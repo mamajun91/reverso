@@ -75,13 +75,11 @@ public class AccueilForm extends JFrame {
                 });
                 MODIFIER.addActionListener(new ActionListener() {
                     @Override
-                    public void actionPerformed(ActionEvent e) {combobox(Crud.MODIFIER,TypeSociete.CLIENT);
-                        }
+                    public void actionPerformed(ActionEvent e) {combobox(Crud.MODIFIER,TypeSociete.CLIENT);}
                 });
                 SUPPRIMER.addActionListener(new ActionListener() {
                     @Override
-                    public void actionPerformed(ActionEvent e) {combobox(Crud.SUPPRIMER,TypeSociete.CLIENT);
-                    }
+                    public void actionPerformed(ActionEvent e) {combobox(Crud.SUPPRIMER,TypeSociete.CLIENT);}
                 });
             }
         });
@@ -150,7 +148,6 @@ public class AccueilForm extends JFrame {
                 remplirCombobox(TypeSociete.PROSPECT);
             }
         }
-
     }
     public void remplirCombobox(TypeSociete typeSociete) {
         switch (typeSociete) {
@@ -166,31 +163,25 @@ public class AccueilForm extends JFrame {
             }
         }
     }
-
     public void combobox(Crud crud , TypeSociete typeSociete){
         switch (typeSociete){
             case CLIENT -> {
                 configModifierSupprimer(TypeSociete.CLIENT);
-                switch (crud) {
-                    case MODIFIER -> {
-                        comboBoxClient.addItemListener(new ItemListener() {
-                            @Override
-                            public void itemStateChanged(ItemEvent e) {
-                                new Particulier(AccueilForm.this).transfertDonnees(TypeSociete.CLIENT, Crud.MODIFIER);
+                comboBoxClient.addItemListener(new ItemListener() {
+                    @Override
+                    public void itemStateChanged(ItemEvent e) {
+                        switch (crud) {
+                            case MODIFIER -> {
+                                new Particulier(AccueilForm.this).transfertDonnees(TypeSociete.CLIENT,Crud.MODIFIER);
                                 dispose();
                             }
-                        });
-                    }
-                    case SUPPRIMER -> {
-                        comboBoxClient.addItemListener(new ItemListener() {
-                            @Override
-                            public void itemStateChanged(ItemEvent e) {
-                                new Particulier(AccueilForm.this).transfertDonnees(TypeSociete.CLIENT, Crud.SUPPRIMER);
+                            case SUPPRIMER -> {
+                                new Particulier(AccueilForm.this).transfertDonnees(TypeSociete.CLIENT,Crud.SUPPRIMER);
                                 dispose();
                             }
-                        });
+                        }
                     }
-                }
+                });
             }
             case PROSPECT -> {
                 configModifierSupprimer(TypeSociete.PROSPECT);
