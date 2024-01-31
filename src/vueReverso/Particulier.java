@@ -156,63 +156,47 @@ public class Particulier extends JFrame {
         Commentaire.setText(societe.getCommentaire());
     }
     public void transfertDonnees(TypeSociete typeSociete,Crud crud) {
-            switch (typeSociete){
-                case CLIENT -> {
-                        i = accueilForm.getComboBoxClient().getSelectedIndex();
-                        System.out.println(i);
-                    if (i >= 0) {
-                        Client client = CollectClient.listClient.get(i-1);
-                        donneesSociete(client);
-                        chiffreAffaire.setText(String.valueOf(client.getChiffreAffaire()));
-                        nombreEmploye.setText(String.valueOf(client.getNombreEmployes()));
-                        switch (crud) {
-                            case MODIFIER -> {
-                                configAjouter(Crud.AJOUTER, TypeSociete.CLIENT);
-                            }
-                            case SUPPRIMER -> {
-                                configAjouter(Crud.SUPPRIMER, TypeSociete.CLIENT);
-                                Ok.addActionListener(new ActionListener() {
-                                    @Override
-                                    public void actionPerformed(ActionEvent e) {
-
-                                    }
-                                });
-                            }
+        switch (typeSociete){
+            case CLIENT -> {
+                i = accueilForm.getComboBoxClient().getSelectedIndex();
+                System.out.println(i);
+                if (i >= 0) {
+                    Client client = CollectClient.listClient.get(i-1);
+                    donneesSociete(client);
+                    chiffreAffaire.setText(String.valueOf(client.getChiffreAffaire()));
+                    nombreEmploye.setText(String.valueOf(client.getNombreEmployes()));
+                    switch (crud) {
+                        case MODIFIER -> {
+                            configAjouter(Crud.AJOUTER, TypeSociete.CLIENT);
+                            valider(TypeSociete.CLIENT,Crud.MODIFIER);
+                        }
+                        case SUPPRIMER -> {
+                            configAjouter(Crud.SUPPRIMER, TypeSociete.CLIENT);
+                            valider(TypeSociete.CLIENT,Crud.SUPPRIMER);
                         }
                     }
-
                 }
-                case PROSPECT -> {
-                     j = accueilForm.getComboBoxProspect().getSelectedIndex();
-                    if (j >= 0) {
-                        Prospect prospect = CollectProspect.listProspect.get(j-1);
-                        donneesSociete(prospect);
-                        dateProspect.setText(prospect.getDateProspect());
-                        prospectInteret2.setText(prospect.getProspectInteresse());
-                        switch (crud) {
-                            case MODIFIER -> {
-                                configAjouter(Crud.AJOUTER, TypeSociete.PROSPECT);
-
-                            }
-                            case SUPPRIMER -> {
-                                configAjouter(Crud.SUPPRIMER, TypeSociete.PROSPECT);
-                                Ok.addActionListener(new ActionListener() {
-                                    @Override
-                                    public void actionPerformed(ActionEvent e) {
-                                        CollectProspect.listProspect.remove(j-1);
-                                        dispose();
-                                        new SocieteForm().remplirSociete(TypeSociete.PROSPECT);
-                                    }
-                                });
-
-                            }
-                        }
-
-                    }
-
-                }
-
             }
+            case PROSPECT -> {
+                j = accueilForm.getComboBoxProspect().getSelectedIndex();
+                if (j >= 0) {
+                    Prospect prospect = CollectProspect.listProspect.get(j-1);
+                    donneesSociete(prospect);
+                    dateProspect.setText(prospect.getDateProspect());
+                    prospectInteret2.setText(prospect.getProspectInteresse());
+                    switch (crud) {
+                        case MODIFIER -> {
+                            configAjouter(Crud.AJOUTER, TypeSociete.PROSPECT);
+                            valider(TypeSociete.PROSPECT,Crud.MODIFIER);
+                        }
+                        case SUPPRIMER -> {
+                            configAjouter(Crud.SUPPRIMER, TypeSociete.PROSPECT);
+                            valider(TypeSociete.PROSPECT,Crud.SUPPRIMER);
+                        }
+                    }
+                }
+            }
+        }
     }
     public void AjouterClient(){
         if (Objects.equals(client, new Client())) {

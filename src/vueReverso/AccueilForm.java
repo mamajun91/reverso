@@ -67,7 +67,7 @@ public class AccueilForm extends JFrame {
                 configurationCliPros();
                 AJOUTER.addActionListener(new ActionListener() {
                     @Override
-                    public void actionPerformed(ActionEvent e) {new Particulier(AccueilForm.this).validerAjout(TypeSociete.CLIENT);}
+                    public void actionPerformed(ActionEvent e) {new Particulier(AccueilForm.this).valider(TypeSociete.CLIENT,Crud.AJOUTER);}
                 });
                 LIRE.addActionListener(new ActionListener() {
                     @Override
@@ -91,7 +91,7 @@ public class AccueilForm extends JFrame {
                 configurationCliPros();
                 AJOUTER.addActionListener(new ActionListener() {
                     @Override
-                    public void actionPerformed(ActionEvent e) {new Particulier(AccueilForm.this).validerAjout(TypeSociete.PROSPECT);}
+                    public void actionPerformed(ActionEvent e) {new Particulier(AccueilForm.this).valider(TypeSociete.PROSPECT,Crud.AJOUTER);}
                 });
                 LIRE.addActionListener(new ActionListener() {
                     @Override
