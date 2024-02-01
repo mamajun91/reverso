@@ -16,7 +16,7 @@ public class Particulier extends JFrame {
     int i;
 
     int j;
-    private AccueilForm accueilForm;
+    private final AccueilForm accueilForm;
     private JPanel panel1;
     private JTextField iden;
     private JTextField RaisonSociale;
@@ -46,7 +46,6 @@ public class Particulier extends JFrame {
         this.accueilForm=accueilForm;
         Init();
     }
-
     public void Init() {
         setVisible(true);
         setTitle("particulier");
@@ -59,9 +58,7 @@ public class Particulier extends JFrame {
         panelValiQuit.setVisible(true);
         config();
     }
-
     public void config() {
-
         Quitter.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -198,41 +195,68 @@ public class Particulier extends JFrame {
             }
         }
     }
-    public void AjouterClient(){
-        if (Objects.equals(client, new Client())) {
-        client.setId(CollectClient.listClient.size()+1);}
-        CollectClient.listClient.add(
-                new Client(Integer.parseInt(iden.getText()),
-                        RaisonSociale.getText(),
-                        NumDeRue.getText(),
-                        NomDeRue.getText(),
-                        CodePostal.getText(),
-                        Ville.getText(),
-                        Telephone.getText(),
-                        AdresseMail.getText(),
-                        Commentaire.getText(),
-                        Double.parseDouble(chiffreAffaire.getText()),
-                        Integer.parseInt(nombreEmploye.getText())
-                )
-        );
+    public void AjouterClientProspect(TypeSociete typeSociete, Crud crud) {
+        switch (typeSociete) {
+            case CLIENT -> {
+                switch (crud){
+                    case AJOUTER -> {
+                if (Objects.equals(client, new Client())) {
+                    client.setId(CollectClient.listClient.size() + 1);
+                }
+                    }
+                    case MODIFIER -> {
+                        if (Objects.equals(client, new Client())){
+                            iden.setEnabled(false);
+                        }
+                    }
+                }
+                CollectClient.listClient.add(
+                        new Client(
+                                Integer.parseInt(iden.getText()),
+                                RaisonSociale.getText(),
+                                NumDeRue.getText(),
+                                NomDeRue.getText(),
+                                CodePostal.getText(),
+                                Ville.getText(),
+                                Telephone.getText(),
+                                AdresseMail.getText(),
+                                Commentaire.getText(),
+                                Double.parseDouble(chiffreAffaire.getText()),
+                                Integer.parseInt(nombreEmploye.getText())
+                        )
+                );
+            }
+            case PROSPECT -> {
+                switch (crud){
+                    case AJOUTER -> {
+                        if (Objects.equals(prospect, new Prospect())) {
+                            prospect.setId(CollectProspect.listProspect.size() + 1);
+                        }
+                    }
+                    case MODIFIER -> {
+                        if (Objects.equals(prospect, new Prospect())) {
+                            iden.setEnabled(false);
+                        }
+                    }
+                }
+                CollectProspect.listProspect.add(
+                        new Prospect(
+                                Integer.parseInt(iden.getText()),
+                                RaisonSociale.getText(),
+                                NumDeRue.getText(),
+                                NomDeRue.getText(),
+                                CodePostal.getText(),
+                                Ville.getText(),
+                                Telephone.getText(),
+                                AdresseMail.getText(),
+                                Commentaire.getText(),
+                                dateProspect.getText(),
+                                prospectInteret2.getText()
+                        )
+                );
+            }
+        }
     }
-    public void AjouterProspect(){
-        if (Objects.equals(prospect, new Prospect())) {
-        prospect.setId(CollectProspect.listProspect.size()+1);}
-        CollectProspect.listProspect.add(new Prospect(Integer.parseInt(iden.getText()),
-                RaisonSociale.getText(),
-                NumDeRue.getText(),
-                NomDeRue.getText(),
-                CodePostal.getText(),
-                Ville.getText(),
-                Telephone.getText(),
-                AdresseMail.getText(),
-                Commentaire.getText(),
-                dateProspect.getText(),
-                prospectInteret2.getText())
-        );
-    }
-
     public void SupCliPros(TypeSociete typeSociete){
         switch (typeSociete){
             case CLIENT -> {
@@ -259,11 +283,11 @@ public class Particulier extends JFrame {
                             case AJOUTER -> {
                                 dispose();
                                 configAjouter(Crud.AJOUTER, TypeSociete.CLIENT);
-                                AjouterClient();
+                                AjouterClientProspect(TypeSociete.CLIENT, Crud.AJOUTER);
                                 new SocieteForm().remplirSociete(TypeSociete.CLIENT);
                             }
                             case MODIFIER -> {
-                                AjouterClient();
+                                AjouterClientProspect(TypeSociete.CLIENT, Crud.MODIFIER);
                                 configAjouter(Crud.AJOUTER, TypeSociete.CLIENT);
                                 SupCliPros(TypeSociete.CLIENT);
                             }
@@ -277,12 +301,12 @@ public class Particulier extends JFrame {
                         switch (crud) {
                             case AJOUTER -> {
                                 dispose();
-                                AjouterProspect();
+                                AjouterClientProspect(TypeSociete.PROSPECT,Crud.AJOUTER);
                                 configAjouter(Crud.AJOUTER, TypeSociete.PROSPECT);
                                 new SocieteForm().remplirSociete(TypeSociete.PROSPECT);
                             }
                             case MODIFIER -> {
-                                AjouterProspect();
+                                AjouterClientProspect(TypeSociete.PROSPECT,Crud.MODIFIER);
                                 configAjouter(Crud.AJOUTER, TypeSociete.PROSPECT);
                                 SupCliPros(TypeSociete.PROSPECT);
                             }
