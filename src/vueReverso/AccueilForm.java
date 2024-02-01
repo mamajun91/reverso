@@ -67,7 +67,7 @@ public class AccueilForm extends JFrame {
                 configurationCliPros();
                 AJOUTER.addActionListener(new ActionListener() {
                     @Override
-                    public void actionPerformed(ActionEvent e) {new Particulier(AccueilForm.this).valider(TypeSociete.CLIENT,Crud.AJOUTER);}
+                    public void actionPerformed(ActionEvent e) {new Particulier(AccueilForm.this).config(TypeSociete.CLIENT, Crud.AJOUTER);}
                 });
                 LIRE.addActionListener(new ActionListener() {
                     @Override
@@ -89,7 +89,7 @@ public class AccueilForm extends JFrame {
                 configurationCliPros();
                 AJOUTER.addActionListener(new ActionListener() {
                     @Override
-                    public void actionPerformed(ActionEvent e) {new Particulier(AccueilForm.this).valider(TypeSociete.PROSPECT,Crud.AJOUTER);}
+                    public void actionPerformed(ActionEvent e) {new Particulier(AccueilForm.this).config(TypeSociete.PROSPECT, Crud.AJOUTER);}
                 });
                 LIRE.addActionListener(new ActionListener() {
                     @Override
@@ -172,11 +172,11 @@ public class AccueilForm extends JFrame {
                     public void itemStateChanged(ItemEvent e) {
                         switch (crud) {
                             case MODIFIER -> {
-                                new Particulier(AccueilForm.this).transfertDonnees(TypeSociete.CLIENT,Crud.MODIFIER);
+                                new Particulier(AccueilForm.this).config(TypeSociete.CLIENT, Crud.MODIFIER);
                                 dispose();
                             }
                             case SUPPRIMER -> {
-                                new Particulier(AccueilForm.this).transfertDonnees(TypeSociete.CLIENT,Crud.SUPPRIMER);
+                                new Particulier(AccueilForm.this).config(TypeSociete.CLIENT, Crud.SUPPRIMER);
                                 dispose();
                             }
                         }
@@ -190,11 +190,11 @@ public class AccueilForm extends JFrame {
                     public void itemStateChanged(ItemEvent e) {
                         switch (crud) {
                             case MODIFIER -> {
-                                new Particulier(AccueilForm.this).transfertDonnees(TypeSociete.PROSPECT,Crud.MODIFIER);
+                                new Particulier(AccueilForm.this).config(TypeSociete.PROSPECT, Crud.MODIFIER);
                                 dispose();
                             }
                             case SUPPRIMER -> {
-                                new Particulier(AccueilForm.this).transfertDonnees(TypeSociete.PROSPECT,Crud.SUPPRIMER);
+                                new Particulier(AccueilForm.this).config(TypeSociete.PROSPECT, Crud.SUPPRIMER);
                                 dispose();
                             }
                         }

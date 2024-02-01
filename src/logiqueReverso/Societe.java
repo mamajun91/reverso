@@ -24,7 +24,7 @@ public abstract class Societe {
                    String adresseMail,
                    String commentaire) {
 
-        this.setId(id);
+        this.setId(id+1);
         this.setRaisonSociale(raisonSociale);
         this.setNumRue(numRue);
         this.setNomRue(nomRue);
@@ -37,7 +37,10 @@ public abstract class Societe {
 
     public int getId() { return id;}
 
-    public void setId(int id) { this.id=id;}
+    public void setId(int id) {
+        this.id=id;
+
+    }
 
     public String getRaisonSociale() {
         return raisonSociale;

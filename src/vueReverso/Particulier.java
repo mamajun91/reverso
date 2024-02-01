@@ -56,9 +56,6 @@ public class Particulier extends JFrame {
         panelClient.setVisible(false);
         panelProspect.setVisible(false);
         panelValiQuit.setVisible(true);
-        config();
-    }
-    public void config() {
         Quitter.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -66,47 +63,48 @@ public class Particulier extends JFrame {
             }
         });
     }
-    public void configAjouter(Crud crud, TypeSociete typeSociete) {
-        iden.setEditable(true);
-        switch (typeSociete) {
+    public void config(TypeSociete typeSociete, Crud crud) {
+
+        switch (typeSociete){
             case CLIENT -> {
-                panelClient.setVisible(true);
-                ChffAffa.setVisible(true);
-                NbrEmpl.setVisible(true);
-                panelProspect.setVisible(false);
-                DtProsp.setVisible(false);
-                PrspInter.setVisible(false);
-                switch (crud) {
+                switch (crud){
                     case AJOUTER -> {
-                        enableFields(true);
-                        enableClientFields(Crud.AJOUTER);
+                        configAjouter(Crud.AJOUTER, TypeSociete.CLIENT);
+                        valider(TypeSociete.CLIENT,Crud.AJOUTER);
+                    }
+                    case MODIFIER -> {
+                        configAjouter(Crud.MODIFIER, TypeSociete.CLIENT);
+                        transfertDonnees(TypeSociete.CLIENT);
+                        valider(TypeSociete.CLIENT,Crud.MODIFIER);
                     }
                     case SUPPRIMER -> {
-                        enableFields(false);
-                        enableClientFields(Crud.SUPPRIMER);
+                        configAjouter(Crud.SUPPRIMER, TypeSociete.CLIENT);
+                        transfertDonnees(TypeSociete.CLIENT);
+                        valider(TypeSociete.CLIENT,Crud.SUPPRIMER);
                     }
                 }
             }
             case PROSPECT -> {
-                panelProspect.setVisible(true);
-                DtProsp.setVisible(true);
-                PrspInter.setVisible(true);
-                panelClient.setVisible(false);
-                ChffAffa.setVisible(false);
-                NbrEmpl.setVisible(false);
-                switch (crud) {
+                switch (crud){
                     case AJOUTER -> {
-                        enableFields(true);
-                        enableProspectFields(Crud.AJOUTER);
+                        configAjouter(Crud.AJOUTER,TypeSociete.PROSPECT);
+                        valider(TypeSociete.PROSPECT,Crud.AJOUTER);
+                    }
+                    case MODIFIER -> {
+                        configAjouter(Crud.MODIFIER,TypeSociete.PROSPECT);
+                        transfertDonnees(TypeSociete.PROSPECT);
+                        valider(TypeSociete.PROSPECT,Crud.MODIFIER);
                     }
                     case SUPPRIMER -> {
-                        enableFields(false);
-                        enableProspectFields(Crud.SUPPRIMER);
+                        configAjouter(Crud.SUPPRIMER,TypeSociete.PROSPECT);
+                        transfertDonnees(TypeSociete.PROSPECT);
+                        valider(TypeSociete.PROSPECT,Crud.SUPPRIMER);
                     }
                 }
             }
         }
     }
+
     public void enableFields(boolean enable) {
         RaisonSociale.setEditable(enable);
         NumDeRue.setEditable(enable);
@@ -141,6 +139,60 @@ public class Particulier extends JFrame {
             }
         }
     }
+    public void configAjouter(Crud crud, TypeSociete typeSociete) {
+        switch (typeSociete) {
+            case CLIENT -> {
+                panelClient.setVisible(true);
+                ChffAffa.setVisible(true);
+                NbrEmpl.setVisible(true);
+                panelProspect.setVisible(false);
+                DtProsp.setVisible(false);
+                PrspInter.setVisible(false);
+                switch (crud) {
+                    case AJOUTER -> {
+                        iden.setEditable(true);
+                        enableFields(true);
+                        enableClientFields(Crud.AJOUTER);
+                    }
+                    case MODIFIER -> {
+                        iden.setEditable(false);
+                        enableFields(true);
+                        enableClientFields(Crud.AJOUTER);
+                    }
+                    case SUPPRIMER -> {
+                        iden.setEditable(false);
+                        enableFields(false);
+                        enableClientFields(Crud.SUPPRIMER);
+                    }
+                }
+            }
+            case PROSPECT -> {
+                panelProspect.setVisible(true);
+                DtProsp.setVisible(true);
+                PrspInter.setVisible(true);
+                panelClient.setVisible(false);
+                ChffAffa.setVisible(false);
+                NbrEmpl.setVisible(false);
+                switch (crud) {
+                    case AJOUTER -> {
+                        iden.setEditable(true);
+                        enableFields(true);
+                        enableProspectFields(Crud.AJOUTER);
+                    }
+                    case MODIFIER -> {
+                        iden.setEditable(false);
+                        enableFields(true);
+                        enableProspectFields(Crud.SUPPRIMER);
+                    }
+                    case SUPPRIMER -> {
+                        iden.setEditable(false);
+                        enableFields(false);
+                        enableProspectFields(Crud.SUPPRIMER);
+                    }
+                }
+            }
+        }
+    }
     public void donneesSociete(Societe societe){
         iden.setText(String.valueOf(societe.getId()));
         RaisonSociale.setText(societe.getRaisonSociale());
@@ -152,26 +204,15 @@ public class Particulier extends JFrame {
         AdresseMail.setText(societe.getAdresseMail());
         Commentaire.setText(societe.getCommentaire());
     }
-    public void transfertDonnees(TypeSociete typeSociete,Crud crud) {
+    public void transfertDonnees(TypeSociete typeSociete) {
         switch (typeSociete){
             case CLIENT -> {
                 i = accueilForm.getComboBoxClient().getSelectedIndex();
-                System.out.println(i);
                 if (i >= 0) {
                     Client client = CollectClient.listClient.get(i-1);
                     donneesSociete(client);
                     chiffreAffaire.setText(String.valueOf(client.getChiffreAffaire()));
                     nombreEmploye.setText(String.valueOf(client.getNombreEmployes()));
-                    switch (crud) {
-                        case MODIFIER -> {
-                            configAjouter(Crud.AJOUTER, TypeSociete.CLIENT);
-                            valider(TypeSociete.CLIENT,Crud.MODIFIER);
-                        }
-                        case SUPPRIMER -> {
-                            configAjouter(Crud.SUPPRIMER, TypeSociete.CLIENT);
-                            valider(TypeSociete.CLIENT,Crud.SUPPRIMER);
-                        }
-                    }
                 }
             }
             case PROSPECT -> {
@@ -181,16 +222,6 @@ public class Particulier extends JFrame {
                     donneesSociete(prospect);
                     dateProspect.setText(prospect.getDateProspect());
                     prospectInteret2.setText(prospect.getProspectInteresse());
-                    switch (crud) {
-                        case MODIFIER -> {
-                            configAjouter(Crud.AJOUTER, TypeSociete.PROSPECT);
-                            valider(TypeSociete.PROSPECT,Crud.MODIFIER);
-                        }
-                        case SUPPRIMER -> {
-                            configAjouter(Crud.SUPPRIMER, TypeSociete.PROSPECT);
-                            valider(TypeSociete.PROSPECT,Crud.SUPPRIMER);
-                        }
-                    }
                 }
             }
         }
@@ -242,16 +273,12 @@ public class Particulier extends JFrame {
     public void SupCliPros(TypeSociete typeSociete){
         switch (typeSociete){
             case CLIENT -> {
-                dispose();
                 i = accueilForm.getComboBoxClient().getSelectedIndex();
                 CollectClient.listClient.remove(i-1);
-                new SocieteForm().remplirSociete(TypeSociete.CLIENT);
             }
             case PROSPECT -> {
-                dispose();
                 j = accueilForm.getComboBoxProspect().getSelectedIndex();
                 CollectProspect.listProspect.remove(j-1);
-                new SocieteForm().remplirSociete(TypeSociete.PROSPECT);
             }
         }
     }
@@ -259,41 +286,34 @@ public class Particulier extends JFrame {
         Ok.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                dispose();
                 switch (typeSociete) {
                     case CLIENT -> {
+                        new SocieteForm().remplirSociete(TypeSociete.CLIENT);
                         switch (crud) {
                             case AJOUTER -> {
-                                dispose();
-                                configAjouter(Crud.AJOUTER, TypeSociete.CLIENT);
                                 AjouterClientProspect(TypeSociete.CLIENT);
-                                new SocieteForm().remplirSociete(TypeSociete.CLIENT);
                             }
                             case MODIFIER -> {
                                 AjouterClientProspect(TypeSociete.CLIENT);
-                                configAjouter(Crud.AJOUTER, TypeSociete.CLIENT);
                                 SupCliPros(TypeSociete.CLIENT);
                             }
                             case SUPPRIMER -> {
-                                configAjouter(Crud.SUPPRIMER, TypeSociete.CLIENT);
                                 SupCliPros(TypeSociete.CLIENT);
                             }
                         }
                     }
                     case PROSPECT -> {
+                        new SocieteForm().remplirSociete(TypeSociete.PROSPECT);
                         switch (crud) {
                             case AJOUTER -> {
-                                dispose();
                                 AjouterClientProspect(TypeSociete.PROSPECT);
-                                configAjouter(Crud.AJOUTER, TypeSociete.PROSPECT);
-                                new SocieteForm().remplirSociete(TypeSociete.PROSPECT);
                             }
                             case MODIFIER -> {
                                 AjouterClientProspect(TypeSociete.PROSPECT);
-                                configAjouter(Crud.AJOUTER, TypeSociete.PROSPECT);
                                 SupCliPros(TypeSociete.PROSPECT);
                             }
                             case SUPPRIMER -> {
-                                configAjouter(Crud.SUPPRIMER, TypeSociete.PROSPECT);
                                 SupCliPros(TypeSociete.PROSPECT);
                             }
                         }

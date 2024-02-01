@@ -27,5 +27,9 @@ public  class Main {
 
 
         new AccueilForm();
+
+        System.out.println(junior.getId());
+        System.out.println(junio.getId());
+        System.out.println(man.getId());
     }
 }
