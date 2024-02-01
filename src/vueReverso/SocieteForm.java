@@ -4,6 +4,7 @@ import logiqueReverso.*;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.awt.*;
 
 public class SocieteForm extends JFrame {
     private JPanel panel1;
@@ -30,10 +31,6 @@ public class SocieteForm extends JFrame {
         panel1.setVisible(true);
         quitter.setVisible(true);
         panelQuit.setVisible(true);
-
-
-
-
     }
 
     public void ConfigurationTable(TypeSociete typeSociete) {
@@ -62,7 +59,6 @@ public class SocieteForm extends JFrame {
                 ConfigurationTable(TypeSociete.CLIENT);
                 String[] tableBaseClient = {"identifiant", "Raison Sociale", "Num rue", "Nom rue", "Code Postal", "Ville", "Téléphone", "Adresse Mail", "Commentaire",
                         "Chiffre Affaire", "Nombre Employés"};
-
                 DefaultTableModel model = new DefaultTableModel();
                 for (String colonne : tableBaseClient) {
                     model.addColumn(colonne);
@@ -85,14 +81,12 @@ public class SocieteForm extends JFrame {
                 }
                 tableClient = new JTable(model);
                 scrollPaneClient = new JScrollPane(tableClient);
-                this.add(scrollPaneClient);
-
+                add(scrollPaneClient);
             }
             case PROSPECT -> {
                 ConfigurationTable(TypeSociete.PROSPECT);
                 String[] tableBaseProspecteur = {"idendtifiant", "Raison Sociale", "Num de rue", "Nom de rue", "Code Postal", "Ville", "Téléphone", "Adresse Mail", "Commentaire",
                         "Date Prospection", "Prospecteur Interessé"};
-
                 DefaultTableModel model1 = new DefaultTableModel();
                 for (String colonne : tableBaseProspecteur) {
                     model1.addColumn(colonne);
