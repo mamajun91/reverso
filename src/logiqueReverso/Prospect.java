@@ -17,7 +17,6 @@ public class Prospect extends Societe{
         super(id, raisonSociale, numRue, nomRue, codePostal, ville, telephone, adresseMail, commentaire);
         this.setDateProspect(dateProspect);
         this.setProspectInteresse(prospectInteresse);
-        this.setId(CollectProspect.listProspect.size()+1);
     }
 
     public String getDateProspect() {

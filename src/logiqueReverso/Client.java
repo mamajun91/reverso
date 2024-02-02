@@ -12,9 +12,10 @@ public class Client extends Societe{
                   String ville, String telephone, String adresseMail, String commentaire,
                   Double chiffreAffaire, int nombreEmployes) {
         super(id, raisonSociale, numRue, nomRue, codePostal, ville, telephone, adresseMail, commentaire);
+
+
         this.setChiffreAffaire(chiffreAffaire);
         this.setNombreEmployes(nombreEmployes);
-        this.setId(CollectClient.listClient.size() + 1);
     }
 
     public double getChiffreAffaire() {

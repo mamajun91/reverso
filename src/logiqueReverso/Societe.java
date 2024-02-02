@@ -24,7 +24,7 @@ public abstract class Societe {
                    String adresseMail,
                    String commentaire) {
 
-        this.setId(id+1);
+        this.setId(id);
         this.setRaisonSociale(raisonSociale);
         this.setNumRue(numRue);
         this.setNomRue(nomRue);

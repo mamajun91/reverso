@@ -4,18 +4,16 @@ import logiqueReverso.*;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import java.awt.*;
 
 public class SocieteForm extends JFrame {
     private JPanel panel1;
     private JTable tableClient;
     private JTable tableProspect;
-    private JPanel panelClient;
-    private JPanel panelProspect;
     private JButton quitter;
     private JScrollPane scrollPaneClient;
     private JScrollPane scrollPanelProspect;
-    private JPanel panelQuit;
+    private JButton details;
+    private JPanel panelQuitter;
 
 
     public SocieteForm() {
@@ -30,24 +28,24 @@ public class SocieteForm extends JFrame {
         this.add(panel1);
         panel1.setVisible(true);
         quitter.setVisible(true);
-        panelQuit.setVisible(true);
+        details.setVisible(true);
     }
 
     public void ConfigurationTable(TypeSociete typeSociete) {
         switch (typeSociete) {
             case CLIENT -> {
-                panelQuit.setVisible(true);
-                panelClient.setVisible(true);
                 tableClient.setVisible(true);
-                panelProspect.setVisible(false);
                 scrollPaneClient.setVisible(true);
+                scrollPanelProspect.setVisible(false);
                 tableProspect.setVisible(false);
+                panelQuitter.setVisible(true);
             }
             case PROSPECT -> {
-                panelProspect.setVisible(true);
                 tableProspect.setVisible(true);
-                panelClient.setVisible(false);
+                scrollPanelProspect.setVisible(true);
                 tableClient.setVisible(false);
+                scrollPaneClient.setVisible(false);
+                panelQuitter.setVisible(true);
             }
         }
     }
@@ -82,6 +80,8 @@ public class SocieteForm extends JFrame {
                 tableClient = new JTable(model);
                 scrollPaneClient = new JScrollPane(tableClient);
                 add(scrollPaneClient);
+                panel1.revalidate();
+                panel1.repaint();
             }
             case PROSPECT -> {
                 ConfigurationTable(TypeSociete.PROSPECT);
