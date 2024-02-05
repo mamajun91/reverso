@@ -3,6 +3,7 @@ package vueReverso;
 
 import Enum.*;
 import ReversoException.CollectionIllegalException;
+import ReversoException.ComboBoxException;
 import logiqueReverso.*;
 
 
@@ -76,17 +77,29 @@ public class AccueilForm extends JFrame {
                         try {
                             new SocieteForm().remplirSociete(TypeSociete.CLIENT);
                         } catch (CollectionIllegalException ex) {
-                            JOptionPane.showConfirmDialog(null,"Problème de au niveau des Collections");
+                            JOptionPane.showConfirmDialog(null,"Problème  au niveau des Collections");
                         }
                     }
                 });
                 MODIFIER.addActionListener(new ActionListener() {
                     @Override
-                    public void actionPerformed(ActionEvent e) {combobox(Crud.MODIFIER,TypeSociete.CLIENT);}
+                    public void actionPerformed(ActionEvent e) {
+                        try {
+                            combobox(Crud.MODIFIER,TypeSociete.CLIENT);
+                        } catch (CollectionIllegalException ex) {
+                            JOptionPane.showConfirmDialog(null,"Problème  au niveau des Collections");
+                        }
+                    }
                 });
                 SUPPRIMER.addActionListener(new ActionListener() {
                     @Override
-                    public void actionPerformed(ActionEvent e) {combobox(Crud.SUPPRIMER,TypeSociete.CLIENT);}
+                    public void actionPerformed(ActionEvent e) {
+                        try {
+                            combobox(Crud.SUPPRIMER,TypeSociete.CLIENT);
+                        } catch (CollectionIllegalException ex) {
+                            JOptionPane.showConfirmDialog(null,"Problème  au niveau des Collections");
+                        }
+                    }
                 });
             }
         });
@@ -110,11 +123,23 @@ public class AccueilForm extends JFrame {
                 });
                 MODIFIER.addActionListener(new ActionListener() {
                     @Override
-                    public void actionPerformed(ActionEvent e) {combobox(Crud.MODIFIER,TypeSociete.PROSPECT);}
+                    public void actionPerformed(ActionEvent e) {
+                        try {
+                            combobox(Crud.MODIFIER,TypeSociete.PROSPECT);
+                        } catch (CollectionIllegalException ex) {
+                            JOptionPane.showConfirmDialog(null,"Problème  au niveau des Collections");
+                        }
+                    }
                 });
                 SUPPRIMER.addActionListener(new ActionListener() {
                     @Override
-                    public void actionPerformed(ActionEvent e) {combobox(Crud.SUPPRIMER,TypeSociete.PROSPECT);}
+                    public void actionPerformed(ActionEvent e) {
+                        try {
+                            combobox(Crud.SUPPRIMER,TypeSociete.PROSPECT);
+                        } catch (CollectionIllegalException ex) {
+                            JOptionPane.showConfirmDialog(null,"Problème  au niveau des Collections");
+                        }
+                    }
                 });
             }
         });
@@ -143,7 +168,7 @@ public class AccueilForm extends JFrame {
         panelCrud.setVisible(true);
         PanelCombobox.setVisible(false);
     }
-    public void configModifierSupprimer(TypeSociete typeSociete){
+    public void configModifierSupprimer(TypeSociete typeSociete) throws CollectionIllegalException {
         panelRETQUIT.setVisible(true);
         panelSelect.setVisible(true);
         panelselectSocie.setVisible(false);
@@ -162,20 +187,29 @@ public class AccueilForm extends JFrame {
             }
         }
     }
-    public void remplirCombobox(TypeSociete typeSociete) {
+    public void remplirCombobox(TypeSociete typeSociete) throws CollectionIllegalException {
         switch (typeSociete) {
             case CLIENT -> {
-                for (Client client : CollectClient.listClient) {
-                    comboBoxClient.addItem(client.getRaisonSociale());
+                if (CollectClient.listClient !=null && !CollectClient.listClient.isEmpty()) {
+                    for (Client client : CollectClient.listClient) {
+                        comboBoxClient.addItem(client.getRaisonSociale());
+                    }
+                }else {
+                    throw new CollectionIllegalException("La liste des clients est vide.");
                 }
             }
             case PROSPECT -> {
-                for (Prospect prospect : CollectProspect.listProspect) {
-                    comboBoxProspect.addItem(prospect.getRaisonSociale());}
+                if (CollectProspect.listProspect != null && !CollectProspect.listProspect.isEmpty()) {
+                    for (Prospect prospect : CollectProspect.listProspect) {
+                        comboBoxProspect.addItem(prospect.getRaisonSociale());
+                    }
+                }else{
+                    throw new CollectionIllegalException("La liste des prospecteurs est vide.");
+                }
             }
         }
     }
-    public void combobox(Crud crud , TypeSociete typeSociete){
+    public void combobox(Crud crud , TypeSociete typeSociete) throws CollectionIllegalException {
         switch (typeSociete){
             case CLIENT -> {
                 configModifierSupprimer(TypeSociete.CLIENT);

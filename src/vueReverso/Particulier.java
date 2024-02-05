@@ -1,6 +1,7 @@
 package vueReverso;
 
 import Enum.*;
+import ReversoException.CollectionIllegalException;
 import logiqueReverso.*;
 
 import javax.swing.*;
@@ -226,47 +227,55 @@ public class Particulier extends JFrame {
             }
         }
     }
-    public void AjouterClientProspect(TypeSociete typeSociete) {
+    public void AjouterClientProspect(TypeSociete typeSociete) throws NumberFormatException {
         switch (typeSociete) {
             case CLIENT -> {
                 if (Objects.equals(client, new Client())) {
                     client.setId(CollectClient.listClient.size()+1);
                 }
-                        CollectClient.listClient.add(
-                                new Client(
-                                        Integer.parseInt(iden.getText()),
-                                        RaisonSociale.getText(),
-                                        NumDeRue.getText(),
-                                        NomDeRue.getText(),
-                                        CodePostal.getText(),
-                                        Ville.getText(),
-                                        Telephone.getText(),
-                                        AdresseMail.getText(),
-                                        Commentaire.getText(),
-                                        Double.parseDouble(chiffreAffaire.getText()),
-                                        Integer.parseInt(nombreEmploye.getText())
-                                )
-                        );
+                try {
+                    CollectClient.listClient.add(
+                            new Client(
+                                    Integer.parseInt(iden.getText()),
+                                    RaisonSociale.getText(),
+                                    NumDeRue.getText(),
+                                    NomDeRue.getText(),
+                                    CodePostal.getText(),
+                                    Ville.getText(),
+                                    Telephone.getText(),
+                                    AdresseMail.getText(),
+                                    Commentaire.getText(),
+                                    Double.parseDouble(chiffreAffaire.getText()),
+                                    Integer.parseInt(nombreEmploye.getText())
+                            )
+                    );
+                }catch (NumberFormatException nfe){
+                    JOptionPane.showConfirmDialog(null,"le format du nombre entré n'est pas correct");
+                }
                     }
             case PROSPECT -> {
                    if (Objects.equals(prospect, new Prospect())) {
                        prospect.setId(CollectProspect.listProspect.size() + 1);
                    }
-                CollectProspect.listProspect.add(
-                        new Prospect(
-                                Integer.parseInt(iden.getText()),
-                                RaisonSociale.getText(),
-                                NumDeRue.getText(),
-                                NomDeRue.getText(),
-                                CodePostal.getText(),
-                                Ville.getText(),
-                                Telephone.getText(),
-                                AdresseMail.getText(),
-                                Commentaire.getText(),
-                                dateProspect.getText(),
-                                prospectInteret2.getText()
-                        )
-                );
+                   try {
+                       CollectProspect.listProspect.add(
+                               new Prospect(
+                                       Integer.parseInt(iden.getText()),
+                                       RaisonSociale.getText(),
+                                       NumDeRue.getText(),
+                                       NomDeRue.getText(),
+                                       CodePostal.getText(),
+                                       Ville.getText(),
+                                       Telephone.getText(),
+                                       AdresseMail.getText(),
+                                       Commentaire.getText(),
+                                       dateProspect.getText(),
+                                       prospectInteret2.getText()
+                               )
+                       );
+                   }catch (NumberFormatException nfe){
+                       JOptionPane.showConfirmDialog(null,"le format du nombre entré n'est pas correct");
+                   }
             }
         }
     }
@@ -289,7 +298,11 @@ public class Particulier extends JFrame {
                 dispose();
                 switch (typeSociete) {
                     case CLIENT -> {
-                        new SocieteForm().remplirSociete(TypeSociete.CLIENT);
+                        try {
+                            new SocieteForm().remplirSociete(TypeSociete.CLIENT);
+                        } catch (CollectionIllegalException ex) {
+                            JOptionPane.showConfirmDialog(null,"Problème  au niveau des Collections");
+                        }
                         switch (crud) {
                             case AJOUTER -> {
                                 AjouterClientProspect(TypeSociete.CLIENT);
@@ -304,7 +317,11 @@ public class Particulier extends JFrame {
                         }
                     }
                     case PROSPECT -> {
-                        new SocieteForm().remplirSociete(TypeSociete.PROSPECT);
+                        try {
+                            new SocieteForm().remplirSociete(TypeSociete.PROSPECT);
+                        } catch (CollectionIllegalException ex) {
+                            JOptionPane.showConfirmDialog(null,"Problème  au niveau des Collections");
+                        }
                         switch (crud) {
                             case AJOUTER -> {
                                 AjouterClientProspect(TypeSociete.PROSPECT);
