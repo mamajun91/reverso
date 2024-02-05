@@ -2,6 +2,7 @@ package vueReverso;
 
 
 import Enum.*;
+import ReversoException.CollectionIllegalException;
 import logiqueReverso.*;
 
 
@@ -71,7 +72,13 @@ public class AccueilForm extends JFrame {
                 });
                 LIRE.addActionListener(new ActionListener() {
                     @Override
-                    public void actionPerformed(ActionEvent e) {new SocieteForm().remplirSociete(TypeSociete.CLIENT);}
+                    public void actionPerformed(ActionEvent e) {
+                        try {
+                            new SocieteForm().remplirSociete(TypeSociete.CLIENT);
+                        } catch (CollectionIllegalException ex) {
+                            JOptionPane.showConfirmDialog(null,"Problème de au niveau des Collections");
+                        }
+                    }
                 });
                 MODIFIER.addActionListener(new ActionListener() {
                     @Override
@@ -93,7 +100,13 @@ public class AccueilForm extends JFrame {
                 });
                 LIRE.addActionListener(new ActionListener() {
                     @Override
-                    public void actionPerformed(ActionEvent e) {new SocieteForm().remplirSociete(TypeSociete.PROSPECT);}
+                    public void actionPerformed(ActionEvent e) {
+                        try {
+                            new SocieteForm().remplirSociete(TypeSociete.PROSPECT);
+                        } catch (CollectionIllegalException ex) {
+                            JOptionPane.showConfirmDialog(null,"Problème de au niveau des Collections");
+                        }
+                    }
                 });
                 MODIFIER.addActionListener(new ActionListener() {
                     @Override
@@ -158,8 +171,7 @@ public class AccueilForm extends JFrame {
             }
             case PROSPECT -> {
                 for (Prospect prospect : CollectProspect.listProspect) {
-                    comboBoxProspect.addItem(prospect.getRaisonSociale());
-                }
+                    comboBoxProspect.addItem(prospect.getRaisonSociale());}
             }
         }
     }

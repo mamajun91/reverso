@@ -1,5 +1,6 @@
 package vueReverso;
 import Enum.*;
+import ReversoException.CollectionIllegalException;
 import logiqueReverso.*;
 
 import javax.swing.*;
@@ -51,65 +52,71 @@ public class SocieteForm extends JFrame {
     }
 
 
-    public void remplirSociete(TypeSociete typeSociete) {
+    public void remplirSociete(TypeSociete typeSociete) throws CollectionIllegalException {
         switch (typeSociete) {
             case CLIENT -> {
                 ConfigurationTable(TypeSociete.CLIENT);
-                String[] tableBaseClient = {"identifiant", "Raison Sociale", "Num rue", "Nom rue", "Code Postal", "Ville", "Téléphone", "Adresse Mail", "Commentaire",
-                        "Chiffre Affaire", "Nombre Employés"};
-                DefaultTableModel model = new DefaultTableModel();
-                for (String colonne : tableBaseClient) {
-                    model.addColumn(colonne);
+                if (CollectClient.listClient != null && !CollectClient.listClient.isEmpty()) {
+                    String[] tableBaseClient = {"identifiant", "Raison Sociale", "Num rue", "Nom rue", "Code Postal", "Ville", "Téléphone", "Adresse Mail", "Commentaire",
+                            "Chiffre Affaire", "Nombre Employés"};
+                    DefaultTableModel model = new DefaultTableModel();
+                    for (String colonne : tableBaseClient) {
+                        model.addColumn(colonne);
+                    }
+                    for (Client client : CollectClient.listClient) {
+                        Object[] rowData = {
+                                client.getId(),
+                                client.getRaisonSociale(),
+                                client.getNumRue(),
+                                client.getNomRue(),
+                                client.getCodePostal(),
+                                client.getVille(),
+                                client.getTelephone(),
+                                client.getAdresseMail(),
+                                client.getCommentaire(),
+                                client.getChiffreAffaire(),
+                                client.getNombreEmployes()
+                        };
+                        model.addRow(rowData);
+                    }
+                    tableClient = new JTable(model);
+                    scrollPaneClient = new JScrollPane(tableClient);
+                    add(scrollPaneClient);
+                } else {
+                    throw new CollectionIllegalException("La liste des clients est vide.");
                 }
-                for (Client client : CollectClient.listClient) {
-                    Object[] rowData = {
-                            client.getId(),
-                            client.getRaisonSociale(),
-                            client.getNumRue(),
-                            client.getNomRue(),
-                            client.getCodePostal(),
-                            client.getVille(),
-                            client.getTelephone(),
-                            client.getAdresseMail(),
-                            client.getCommentaire(),
-                            client.getChiffreAffaire(),
-                            client.getNombreEmployes()
-                    };
-                    model.addRow(rowData);
-                }
-                tableClient = new JTable(model);
-                scrollPaneClient = new JScrollPane(tableClient);
-                add(scrollPaneClient);
-                panel1.revalidate();
-                panel1.repaint();
             }
             case PROSPECT -> {
                 ConfigurationTable(TypeSociete.PROSPECT);
-                String[] tableBaseProspecteur = {"idendtifiant", "Raison Sociale", "Num de rue", "Nom de rue", "Code Postal", "Ville", "Téléphone", "Adresse Mail", "Commentaire",
-                        "Date Prospection", "Prospecteur Interessé"};
-                DefaultTableModel model1 = new DefaultTableModel();
-                for (String colonne : tableBaseProspecteur) {
-                    model1.addColumn(colonne);
+                if (CollectProspect.listProspect != null && !CollectProspect.listProspect.isEmpty()) {
+                    String[] tableBaseProspecteur = {"idendtifiant", "Raison Sociale", "Num de rue", "Nom de rue", "Code Postal", "Ville", "Téléphone", "Adresse Mail", "Commentaire",
+                            "Date Prospection", "Prospecteur Interessé"};
+                    DefaultTableModel model1 = new DefaultTableModel();
+                    for (String colonne : tableBaseProspecteur) {
+                        model1.addColumn(colonne);
+                    }
+                    for (Prospect prospect : CollectProspect.listProspect) {
+                        Object[] rowData = {
+                                prospect.getId(),
+                                prospect.getRaisonSociale(),
+                                prospect.getNumRue(),
+                                prospect.getNomRue(),
+                                prospect.getCodePostal(),
+                                prospect.getVille(),
+                                prospect.getTelephone(),
+                                prospect.getAdresseMail(),
+                                prospect.getCommentaire(),
+                                prospect.getDateProspect(),
+                                prospect.getProspectInteresse()
+                        };
+                        model1.addRow(rowData);
+                    }
+                    tableProspect = new JTable(model1);
+                    scrollPanelProspect = new JScrollPane(tableProspect);
+                    add(scrollPanelProspect);
+                }else{
+                    throw new CollectionIllegalException("La liste des prospecteurs est vide.");
                 }
-                for (Prospect prospect : CollectProspect.listProspect) {
-                    Object[] rowData = {
-                            prospect.getId(),
-                            prospect.getRaisonSociale(),
-                            prospect.getNumRue(),
-                            prospect.getNomRue(),
-                            prospect.getCodePostal(),
-                            prospect.getVille(),
-                            prospect.getTelephone(),
-                            prospect.getAdresseMail(),
-                            prospect.getCommentaire(),
-                            prospect.getDateProspect(),
-                            prospect.getProspectInteresse()
-                    };
-                    model1.addRow(rowData);
-                }
-                tableProspect = new JTable(model1);
-                scrollPanelProspect = new JScrollPane(tableProspect);
-                add(scrollPanelProspect);
             }
         }
     }
