@@ -3,7 +3,6 @@ package vueReverso;
 
 import Enum.*;
 import ReversoException.CollectionIllegalException;
-import ReversoException.ComboBoxException;
 import logiqueReverso.*;
 
 
@@ -69,7 +68,14 @@ public class AccueilForm extends JFrame {
                 configurationCliPros();
                 AJOUTER.addActionListener(new ActionListener() {
                     @Override
-                    public void actionPerformed(ActionEvent e) {new Particulier(AccueilForm.this).config(TypeSociete.CLIENT, Crud.AJOUTER);}
+                    public void actionPerformed(ActionEvent e) {
+                        try {
+                            new Particulier(AccueilForm.this).config(TypeSociete.CLIENT, Crud.AJOUTER);
+                        } catch (CollectionIllegalException ex) {
+                            throw new RuntimeException(ex);
+                        }
+                    }
+
                 });
                 LIRE.addActionListener(new ActionListener() {
                     @Override
@@ -109,7 +115,13 @@ public class AccueilForm extends JFrame {
                 configurationCliPros();
                 AJOUTER.addActionListener(new ActionListener() {
                     @Override
-                    public void actionPerformed(ActionEvent e) {new Particulier(AccueilForm.this).config(TypeSociete.PROSPECT, Crud.AJOUTER);}
+                    public void actionPerformed(ActionEvent e) {
+                        try {
+                            new Particulier(AccueilForm.this).config(TypeSociete.PROSPECT, Crud.AJOUTER);
+                        } catch (CollectionIllegalException ex) {
+                            throw new RuntimeException(ex);
+                        }
+                    }
                 });
                 LIRE.addActionListener(new ActionListener() {
                     @Override
@@ -218,11 +230,19 @@ public class AccueilForm extends JFrame {
                     public void itemStateChanged(ItemEvent e) {
                         switch (crud) {
                             case MODIFIER -> {
-                                new Particulier(AccueilForm.this).config(TypeSociete.CLIENT, Crud.MODIFIER);
+                                try {
+                                    new Particulier(AccueilForm.this).config(TypeSociete.CLIENT, Crud.MODIFIER);
+                                } catch (CollectionIllegalException ex) {
+                                    throw new RuntimeException(ex);
+                                }
                                 dispose();
                             }
                             case SUPPRIMER -> {
-                                new Particulier(AccueilForm.this).config(TypeSociete.CLIENT, Crud.SUPPRIMER);
+                                try {
+                                    new Particulier(AccueilForm.this).config(TypeSociete.CLIENT, Crud.SUPPRIMER);
+                                } catch (CollectionIllegalException ex) {
+                                    throw new RuntimeException(ex);
+                                }
                                 dispose();
                             }
                         }
@@ -236,11 +256,19 @@ public class AccueilForm extends JFrame {
                     public void itemStateChanged(ItemEvent e) {
                         switch (crud) {
                             case MODIFIER -> {
-                                new Particulier(AccueilForm.this).config(TypeSociete.PROSPECT, Crud.MODIFIER);
+                                try {
+                                    new Particulier(AccueilForm.this).config(TypeSociete.PROSPECT, Crud.MODIFIER);
+                                } catch (CollectionIllegalException ex) {
+                                    throw new RuntimeException(ex);
+                                }
                                 dispose();
                             }
                             case SUPPRIMER -> {
-                                new Particulier(AccueilForm.this).config(TypeSociete.PROSPECT, Crud.SUPPRIMER);
+                                try {
+                                    new Particulier(AccueilForm.this).config(TypeSociete.PROSPECT, Crud.SUPPRIMER);
+                                } catch (CollectionIllegalException ex) {
+                                    throw new RuntimeException(ex);
+                                }
                                 dispose();
                             }
                         }

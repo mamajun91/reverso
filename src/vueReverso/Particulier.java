@@ -7,7 +7,6 @@ import logiqueReverso.*;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.util.Objects;
 
 public class Particulier extends JFrame {
@@ -64,7 +63,7 @@ public class Particulier extends JFrame {
             }
         });
     }
-    public void config(TypeSociete typeSociete, Crud crud) {
+    public void config(TypeSociete typeSociete, Crud crud) throws CollectionIllegalException {
 
         switch (typeSociete){
             case CLIENT -> {
@@ -209,12 +208,13 @@ public class Particulier extends JFrame {
         switch (typeSociete){
             case CLIENT -> {
                 i = accueilForm.getComboBoxClient().getSelectedIndex();
-                if (i >= 0) {
-                    Client client = CollectClient.listClient.get(i-1);
-                    donneesSociete(client);
-                    chiffreAffaire.setText(String.valueOf(client.getChiffreAffaire()));
-                    nombreEmploye.setText(String.valueOf(client.getNombreEmployes()));
-                }
+                    if (i >= 0) {
+                        Client client = CollectClient.listClient.get(i - 1);
+                        donneesSociete(client);
+                        chiffreAffaire.setText(String.valueOf(client.getChiffreAffaire()));
+                        nombreEmploye.setText(String.valueOf(client.getNombreEmployes()));
+                    }
+
             }
             case PROSPECT -> {
                 j = accueilForm.getComboBoxProspect().getSelectedIndex();
@@ -227,13 +227,43 @@ public class Particulier extends JFrame {
             }
         }
     }
-    public void AjouterClientProspect(TypeSociete typeSociete) throws NumberFormatException {
+    public Boolean verif(TypeSociete typeSociete){
+        if (       iden.getText().isEmpty()
+                || RaisonSociale.getText().isEmpty() || RaisonSociale.getText() == null
+                || NumDeRue.getText().isEmpty() || NumDeRue.getText() == null
+                || NomDeRue.getText().isEmpty() || NomDeRue.getText() == null
+                || CodePostal.getText().isEmpty() || CodePostal.getText() == null
+                || Ville.getText().isEmpty() || Ville.getText() == null
+                || Telephone.getText().isEmpty() || Telephone.getText() == null
+                || AdresseMail.getText().isEmpty() || AdresseMail.getText() == null
+                || Commentaire.getText().isEmpty() || Commentaire.getText() == null)
+                switch (typeSociete){
+                    case CLIENT -> {
+                        if (chiffreAffaire.getText().isEmpty() || chiffreAffaire.getText()== null
+                            ||nombreEmploye.getText().isEmpty() || nombreEmploye.getText() == null){
+                            JOptionPane.showConfirmDialog(null, "Tous les champs doivent être renseignés");
+                        }
+                    }
+                    case PROSPECT -> {
+                        if (dateProspect.getText().isEmpty() || dateProspect.getText() == null
+                            || prospectInteret2.getText().isEmpty() || prospectInteret2.getText() == null){
+                            JOptionPane.showConfirmDialog(null, "Tous les champs doivent être renseignés");
+                        }
+                    }
+                }
+        {
+        }
+        return false;
+    }
+    public void AjouterClientProspect(TypeSociete typeSociete) throws IllegalArgumentException {
         switch (typeSociete) {
             case CLIENT -> {
                 if (Objects.equals(client, new Client())) {
                     client.setId(CollectClient.listClient.size()+1);
                 }
-                try {
+                if (client.getChiffreAffaire() != Double.parseDouble(chiffreAffaire.getText())){
+                        JOptionPane.showConfirmDialog(null, "le format du CA n'est pas correct");
+                }
                     CollectClient.listClient.add(
                             new Client(
                                     Integer.parseInt(iden.getText()),
@@ -249,9 +279,6 @@ public class Particulier extends JFrame {
                                     Integer.parseInt(nombreEmploye.getText())
                             )
                     );
-                }catch (NumberFormatException nfe){
-                    JOptionPane.showConfirmDialog(null,"le format du nombre entré n'est pas correct");
-                }
                     }
             case PROSPECT -> {
                    if (Objects.equals(prospect, new Prospect())) {
@@ -291,10 +318,11 @@ public class Particulier extends JFrame {
             }
         }
     }
-    public void valider(TypeSociete typeSociete, Crud crud) {
+    public void valider(TypeSociete typeSociete, Crud crud) throws CollectionIllegalException{
         Ok.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                if (verif(typeSociete)){
                 dispose();
                 switch (typeSociete) {
                     case CLIENT -> {
@@ -335,6 +363,9 @@ public class Particulier extends JFrame {
                             }
                         }
                     }
+                }
+            }else {
+                    JOptionPane.showConfirmDialog(null, "Tous les champs doivent être renseignés");
                 }
             }
         });
