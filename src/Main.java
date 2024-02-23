@@ -26,10 +26,7 @@ public  class Main {
         CollectClient.listClient.add(junio);
 
 
-        new AccueilForm();
+       /** new AccueilForm();**/
 
-        System.out.println(junior.getId());
-        System.out.println(junio.getId());
-        System.out.println(man.getId());
     }
 }

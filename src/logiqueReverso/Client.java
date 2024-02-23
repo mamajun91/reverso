@@ -22,24 +22,26 @@ public class Client extends Societe{
         return chiffreAffaire;
     }
 
-    public void setChiffreAffaire(Double chiffreAffaire) {
-        if (!(chiffreAffaire.isNaN()) && (chiffreAffaire>200.00)){
-        this.chiffreAffaire = chiffreAffaire;
+    public double setChiffreAffaire(double chiffreAffaire) {
+        if (chiffreAffaire>200.00){
+            this.chiffreAffaire = chiffreAffaire;
         }else {
             System.out.println("Le chiffre d'affaire n'est pas bien renseigné");
         }
+        return chiffreAffaire;
     }
 
     public int getNombreEmployes() {
         return nombreEmployes;
     }
 
-    public void setNombreEmployes(int nombreEmployes) {
-        if ((nombreEmployes>0)){
+    public int setNombreEmployes(int nombreEmployes) {
+        if (nombreEmployes >0){
             this.nombreEmployes = nombreEmployes;
         }else {
             System.out.println("Le nombre d'employés n'est pas correctement indiqué");
         }
+        return nombreEmployes;
     }
 
     @Override

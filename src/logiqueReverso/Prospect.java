@@ -1,6 +1,5 @@
 package logiqueReverso;
 
-import java.time.LocalDate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -24,7 +23,7 @@ public class Prospect extends Societe{
         return dateProspect;
     }
 
-    public void setDateProspect(String dateProspect) {
+    public String setDateProspect(String dateProspect) {
         String dat="^[0-9]{2}/[0-9]{2}/[0-9]{4}$";
         Pattern pt = Pattern.compile(dat);
         Matcher mt = pt.matcher(dateProspect);
@@ -34,6 +33,7 @@ public class Prospect extends Societe{
         } else {
             System.out.println("la date n'est pas bien renseignée");
         }
+        return dateProspect;
     }
 
     public String getProspectInteresse() {
