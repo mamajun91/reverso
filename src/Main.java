@@ -26,7 +26,7 @@ public  class Main {
         CollectClient.listClient.add(junio);
 
 
-       /** new AccueilForm();**/
+        new AccueilForm();
 
     }
 }
