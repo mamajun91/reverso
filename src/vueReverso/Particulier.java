@@ -62,8 +62,8 @@ public class Particulier extends JFrame {
                 dispose();
             }
         });
-    }
-    public void config(TypeSociete typeSociete, Crud crud) throws CollectionIllegalException {
+    }}
+    /**public void config(TypeSociete typeSociete, Crud crud) throws CollectionIllegalException {
 
         switch (typeSociete){
             case CLIENT -> {
@@ -255,7 +255,7 @@ public class Particulier extends JFrame {
         }
         return false;
     }
-    public void AjouterClientProspect(TypeSociete typeSociete) throws IllegalArgumentException {
+  /**  public void AjouterClientProspect(TypeSociete typeSociete) throws IllegalArgumentException {
         switch (typeSociete) {
             case CLIENT -> {
                 if (Objects.equals(client, new Client())) {
@@ -371,5 +371,4 @@ public class Particulier extends JFrame {
         });
     }
 }
-
-
+     **/

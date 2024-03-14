@@ -1,10 +1,7 @@
 package ReversoTestUni;
 
 import logiqueReverso.Client;
-import logiqueReverso.CollectClient;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class ClientTestTest extends Client {
 

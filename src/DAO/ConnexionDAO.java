@@ -4,7 +4,6 @@ import ReversoException.Dbexception;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -30,9 +29,8 @@ public class ConnexionDAO {
         }
     }
 
-    private ConnexionDAO(){}
-
-
+    public ConnexionDAO(){}
+    
     public Connection getConnection() throws Dbexception {
         if (connection == null){
             throw  new Dbexception("Vérifiez les données de connexion!");

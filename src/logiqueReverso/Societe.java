@@ -51,8 +51,7 @@ public abstract class Societe {
         if (raisonSociale.isEmpty() | raisonSociale.isBlank()){
                 System.out.println("La raison sociale est vide ");
             }
-         else {
-        this.raisonSociale = raisonSociale;}
+         else {this.raisonSociale = raisonSociale;}
     }
 
     public String getNumRue() {

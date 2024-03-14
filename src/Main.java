@@ -1,12 +1,9 @@
 import log.FormatterReverso;
 import logiqueReverso.Client;
-import logiqueReverso.CollectClient;
-import logiqueReverso.CollectProspect;
 import logiqueReverso.Prospect;
 import vueReverso.AccueilForm;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.logging.FileHandler;
 
 import static log.LogReverso.LOGGER;
@@ -26,14 +23,12 @@ public  class Main {
                 "0624199590", "mahob@gmail.com", "interessé", "28/08/1991", "oui") {
         };
 
-        CollectProspect.listProspect.add(man);
-        CollectClient.listClient.add(junior);
-        CollectClient.listClient.add(junio);
+        
 
 
         new AccueilForm();
 
-        FileHandler fh = new FileHandler("LogAppli.log", true);
+        FileHandler fh = new FileHandler("LogReverso.log", true);
         LOGGER.setUseParentHandlers(false);
         LOGGER.addHandler(fh);
         fh.setFormatter(new FormatterReverso());

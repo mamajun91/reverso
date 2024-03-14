@@ -44,7 +44,7 @@ public class AccueilForm extends JFrame {
 
     public AccueilForm() {
         Init();
-        config();
+        /**config();**/
     }
     public void Init() {
         setVisible(true);
@@ -58,9 +58,9 @@ public class AccueilForm extends JFrame {
         panelselectSocie.setVisible(true);
         panelCrud.setVisible(false);
         PanelCombobox.setVisible(false);
-    }
+    }}
 // actions boutons Bienvenue et selction Client ou Prospect...........................................................
-    public void config() {
+   /** public void config() {
 
         Client.addActionListener(new ActionListener() {
             @Override
@@ -278,5 +278,5 @@ public class AccueilForm extends JFrame {
         }
     }
 }
-
+**/
 

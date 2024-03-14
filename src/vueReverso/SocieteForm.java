@@ -49,9 +49,9 @@ public class SocieteForm extends JFrame {
                 panelQuitter.setVisible(true);
             }
         }
-    }
+    }}
 
-
+/**
     public void remplirSociete(TypeSociete typeSociete) throws CollectionIllegalException {
         switch (typeSociete) {
             case CLIENT -> {
@@ -121,3 +121,4 @@ public class SocieteForm extends JFrame {
         }
     }
 }
+**/
