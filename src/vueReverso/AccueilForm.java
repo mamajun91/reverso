@@ -4,6 +4,9 @@ package vueReverso;
 import Enum.*;
 import ReversoException.CollectionIllegalException;
 import logiqueReverso.*;
+import DAO.Client_DAO;
+import DAO.ProspectDAO;
+import DAO.ConnexionDAO;
 
 
 
@@ -13,6 +16,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.sql.SQLException;
 
 public class AccueilForm extends JFrame {
 
@@ -42,9 +46,15 @@ public class AccueilForm extends JFrame {
         return comboBoxProspect;
     }
 
+
+    Client_DAO clientDao = new Client_DAO();
+    ProspectDAO prospectDAO = new ProspectDAO();
+    ConnexionDAO con = new ConnexionDAO();
+    TypeSociete typeSociete;
+
     public AccueilForm() {
         Init();
-        /**config();**/
+        config(typeSociete);
     }
     public void Init() {
         setVisible(true);
@@ -58,9 +68,9 @@ public class AccueilForm extends JFrame {
         panelselectSocie.setVisible(true);
         panelCrud.setVisible(false);
         PanelCombobox.setVisible(false);
-    }}
+    }
 // actions boutons Bienvenue et selction Client ou Prospect...........................................................
-   /** public void config() {
+    public void config(TypeSociete typeSociete) {
 
         Client.addActionListener(new ActionListener() {
             @Override
@@ -73,6 +83,8 @@ public class AccueilForm extends JFrame {
                             new Particulier(AccueilForm.this).config(TypeSociete.CLIENT, Crud.AJOUTER);
                         } catch (CollectionIllegalException ex) {
                             throw new RuntimeException(ex);
+                        } catch (SQLException ex) {
+                            throw new RuntimeException(ex);
                         }
                     }
 
@@ -82,7 +94,7 @@ public class AccueilForm extends JFrame {
                     public void actionPerformed(ActionEvent e) {
                         try {
                             new SocieteForm().remplirSociete(TypeSociete.CLIENT);
-                        } catch (CollectionIllegalException ex) {
+                        } catch (CollectionIllegalException | SQLException ex) {
                             JOptionPane.showConfirmDialog(null,"Problème  au niveau des Collections");
                         }
                     }
@@ -94,6 +106,8 @@ public class AccueilForm extends JFrame {
                             combobox(Crud.MODIFIER,TypeSociete.CLIENT);
                         } catch (CollectionIllegalException ex) {
                             JOptionPane.showConfirmDialog(null,"Problème  au niveau des Collections");
+                        } catch (SQLException ex) {
+                            throw new RuntimeException(ex);
                         }
                     }
                 });
@@ -102,7 +116,7 @@ public class AccueilForm extends JFrame {
                     public void actionPerformed(ActionEvent e) {
                         try {
                             combobox(Crud.SUPPRIMER,TypeSociete.CLIENT);
-                        } catch (CollectionIllegalException ex) {
+                        } catch (CollectionIllegalException | SQLException ex) {
                             JOptionPane.showConfirmDialog(null,"Problème  au niveau des Collections");
                         }
                     }
@@ -118,7 +132,7 @@ public class AccueilForm extends JFrame {
                     public void actionPerformed(ActionEvent e) {
                         try {
                             new Particulier(AccueilForm.this).config(TypeSociete.PROSPECT, Crud.AJOUTER);
-                        } catch (CollectionIllegalException ex) {
+                        } catch (CollectionIllegalException | SQLException ex) {
                             throw new RuntimeException(ex);
                         }
                     }
@@ -128,7 +142,7 @@ public class AccueilForm extends JFrame {
                     public void actionPerformed(ActionEvent e) {
                         try {
                             new SocieteForm().remplirSociete(TypeSociete.PROSPECT);
-                        } catch (CollectionIllegalException ex) {
+                        } catch (CollectionIllegalException | SQLException ex) {
                             JOptionPane.showConfirmDialog(null,"Problème de au niveau des Collections");
                         }
                     }
@@ -138,7 +152,7 @@ public class AccueilForm extends JFrame {
                     public void actionPerformed(ActionEvent e) {
                         try {
                             combobox(Crud.MODIFIER,TypeSociete.PROSPECT);
-                        } catch (CollectionIllegalException ex) {
+                        } catch (CollectionIllegalException | SQLException ex) {
                             JOptionPane.showConfirmDialog(null,"Problème  au niveau des Collections");
                         }
                     }
@@ -148,7 +162,7 @@ public class AccueilForm extends JFrame {
                     public void actionPerformed(ActionEvent e) {
                         try {
                             combobox(Crud.SUPPRIMER,TypeSociete.PROSPECT);
-                        } catch (CollectionIllegalException ex) {
+                        } catch (CollectionIllegalException | SQLException ex) {
                             JOptionPane.showConfirmDialog(null,"Problème  au niveau des Collections");
                         }
                     }
@@ -180,7 +194,7 @@ public class AccueilForm extends JFrame {
         panelCrud.setVisible(true);
         PanelCombobox.setVisible(false);
     }
-    public void configModifierSupprimer(TypeSociete typeSociete) throws CollectionIllegalException {
+    public void configModifierSupprimer(TypeSociete typeSociete) throws CollectionIllegalException, SQLException {
         panelRETQUIT.setVisible(true);
         panelSelect.setVisible(true);
         panelselectSocie.setVisible(false);
@@ -199,11 +213,11 @@ public class AccueilForm extends JFrame {
             }
         }
     }
-    public void remplirCombobox(TypeSociete typeSociete) throws CollectionIllegalException {
+    public void remplirCombobox(TypeSociete typeSociete) throws CollectionIllegalException, SQLException {
         switch (typeSociete) {
             case CLIENT -> {
-                if (CollectClient.listClient !=null && !CollectClient.listClient.isEmpty()) {
-                    for (Client client : CollectClient.listClient) {
+                if (clientDao.findAll(con) !=null && !clientDao.findAll(con).isEmpty()) {
+                    for (Client client : clientDao.findAll(con)) {
                         comboBoxClient.addItem(client.getRaisonSociale());
                     }
                 }else {
@@ -211,8 +225,8 @@ public class AccueilForm extends JFrame {
                 }
             }
             case PROSPECT -> {
-                if (CollectProspect.listProspect != null && !CollectProspect.listProspect.isEmpty()) {
-                    for (Prospect prospect : CollectProspect.listProspect) {
+                if (prospectDAO.findAll(con) != null && !prospectDAO.findAll(con).isEmpty()) {
+                    for (Prospect prospect : prospectDAO.findAll(con)) {
                         comboBoxProspect.addItem(prospect.getRaisonSociale());
                     }
                 }else{
@@ -221,7 +235,7 @@ public class AccueilForm extends JFrame {
             }
         }
     }
-    public void combobox(Crud crud , TypeSociete typeSociete) throws CollectionIllegalException {
+    public void combobox(Crud crud , TypeSociete typeSociete) throws CollectionIllegalException, SQLException {
         switch (typeSociete){
             case CLIENT -> {
                 configModifierSupprimer(TypeSociete.CLIENT);
@@ -232,7 +246,7 @@ public class AccueilForm extends JFrame {
                             case MODIFIER -> {
                                 try {
                                     new Particulier(AccueilForm.this).config(TypeSociete.CLIENT, Crud.MODIFIER);
-                                } catch (CollectionIllegalException ex) {
+                                } catch (CollectionIllegalException | SQLException ex) {
                                     throw new RuntimeException(ex);
                                 }
                                 dispose();
@@ -240,7 +254,7 @@ public class AccueilForm extends JFrame {
                             case SUPPRIMER -> {
                                 try {
                                     new Particulier(AccueilForm.this).config(TypeSociete.CLIENT, Crud.SUPPRIMER);
-                                } catch (CollectionIllegalException ex) {
+                                } catch (CollectionIllegalException | SQLException ex) {
                                     throw new RuntimeException(ex);
                                 }
                                 dispose();
@@ -258,7 +272,7 @@ public class AccueilForm extends JFrame {
                             case MODIFIER -> {
                                 try {
                                     new Particulier(AccueilForm.this).config(TypeSociete.PROSPECT, Crud.MODIFIER);
-                                } catch (CollectionIllegalException ex) {
+                                } catch (CollectionIllegalException | SQLException ex) {
                                     throw new RuntimeException(ex);
                                 }
                                 dispose();
@@ -266,7 +280,7 @@ public class AccueilForm extends JFrame {
                             case SUPPRIMER -> {
                                 try {
                                     new Particulier(AccueilForm.this).config(TypeSociete.PROSPECT, Crud.SUPPRIMER);
-                                } catch (CollectionIllegalException ex) {
+                                } catch (CollectionIllegalException | SQLException ex) {
                                     throw new RuntimeException(ex);
                                 }
                                 dispose();
@@ -278,5 +292,5 @@ public class AccueilForm extends JFrame {
         }
     }
 }
-**/
+
 

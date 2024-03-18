@@ -98,7 +98,7 @@
                 </constraints>
                 <properties>
                   <model>
-                    <item value="B"/>
+                    <item value="SELECT"/>
                   </model>
                 </properties>
               </component>
@@ -108,7 +108,7 @@
                 </constraints>
                 <properties>
                   <model>
-                    <item value="E"/>
+                    <item value="SELECT"/>
                   </model>
                 </properties>
               </component>

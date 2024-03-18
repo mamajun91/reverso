@@ -1,8 +1,6 @@
 package DAO;
 
 import ReversoException.Dbexception;
-import com.mysql.cj.x.protobuf.Mysqlx;
-import log.LogReverso;
 import logiqueReverso.Client;
 
 import java.sql.PreparedStatement;
@@ -32,13 +30,13 @@ public class Client_DAO {
         Statement stmt = null;
         String query = "SELECT s.*, c.chiffre_affaire, c.nombre_employe " +
                 "FROM reverso.societe s " +
-                "INNER JOIN reverso.client c ON s.id_societe = c.id_societe";
+                "INNER JOIN reverso.client c ON s.id_societe = c.id_societe ";
         ArrayList<Client> clients = new ArrayList<>();
-        Client client = new Client();
         try {
             stmt = con.getConnection().createStatement();
             ResultSet rs = stmt.executeQuery(query);
             while (rs.next()) {
+                Client client = new Client();
                 findAllOne(client, rs); // Remplissez cette instance avec les données actuelles
                 clients.add(client); // Ajoutez cette instance à la liste des clients
             }
@@ -53,13 +51,12 @@ public class Client_DAO {
         }
         return clients;
     }
-
-    public Client find(ConnexionDAO con) throws SQLException {
+    public Client find(ConnexionDAO con, int id_client) throws SQLException {
         PreparedStatement pstmt = null;
         String query = "SELECT s.*, c.chiffre_affaire, c.nombre_employe " +
                 "FROM reverso.societe s " +
                 "INNER JOIN reverso.client c ON s.id_societe = c.id_societe " +
-                "WHERE c.id_societe = 1";
+                "WHERE s.id_societe = id_client ";
         Client client = new Client();
         try {
             pstmt = con.getConnection().prepareStatement(query);
@@ -85,19 +82,19 @@ public class Client_DAO {
         }
         return client;
     }
-        public ArrayList<Client> create(ConnexionDAO con) throws SQLException {
+        public ArrayList<Client> create(ConnexionDAO con, Client newClient) throws SQLException {
         String querySociete = "INSERT INTO reverso.societe (raison_sociale,num_rue,nom_rue,code_postal,ville,telephone,adresse_mail,commentaire) "+
                 "VALUES (?,?,?,?,?,?,?,?,?)";
         String queryClient = "INSERT INTO reverso.client (id_societe, chiffre_affaire, nombre_employe) "+
-                "VALUES (LAST_INSERT_ID(), ?, ?)";
+                "VALUES (LAST_INSERT_ID(), ?, ?) ";
         return getClients(con, querySociete, queryClient);
     }
 
-    public Client update(ConnexionDAO con) throws Dbexception, SQLException {
+    public Client update(ConnexionDAO con, int id_societe) throws Dbexception, SQLException {
         String queryClient = "UPDATE reverso.client " +
-                "SET chiffre_affaire = 2347778.34, nombre_employe = 45 " +
-                "WHERE id_societe = 1";
-        Client client = find(con);
+                "SET chiffre_affaire = ?, nombre_employe = ? " +
+                "WHERE id_societe = id_societe ";
+        Client client = find(con, id_societe);
         try (PreparedStatement stmtClient = con.getConnection().prepareStatement(queryClient)) {
             stmtClient.executeUpdate();
         } catch (SQLException e) {
@@ -107,10 +104,10 @@ public class Client_DAO {
         return client;
     }
 
-    public ArrayList<Client> delete(ConnexionDAO con) throws SQLException {
+    public ArrayList<Client> delete(ConnexionDAO con, Client id_societe) throws SQLException {
         Statement stmt = null;
-        String querySociete = "DELETE FROM reverso.societe WHERE id_societe = 1";
-        String queryClient= "DELETE FROM reverso.client WHERE id_societe = 1";
+        String querySociete ="DELETE FROM reverso.societe WHERE id_societe = id_societe";
+        String queryClient="DELETE FROM reverso.client WHERE id_societe = id_societe";
         return getClients(con, querySociete, queryClient);
     }
     private ArrayList<Client> getClients(ConnexionDAO con, String querySociete, String queryClient) throws SQLException {

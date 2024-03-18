@@ -1,20 +1,29 @@
 package vueReverso;
+import DAO.ConnexionDAO;
 import Enum.*;
 import ReversoException.CollectionIllegalException;
 import logiqueReverso.*;
+import DAO.Client_DAO;
+import DAO.ProspectDAO;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.awt.*;
+import java.sql.SQLException;
 
 public class SocieteForm extends JFrame {
     private JPanel panel1;
     private JTable tableClient;
     private JTable tableProspect;
-    private JButton quitter;
+
     private JScrollPane scrollPaneClient;
     private JScrollPane scrollPanelProspect;
-    private JButton details;
-    private JPanel panelQuitter;
+    private JButton buttonQuitter;
+    private JButton buttonDetails;
+
+    Client_DAO clientDao = new Client_DAO();
+    ProspectDAO prospectDAO = new ProspectDAO();
+    ConnexionDAO con = new ConnexionDAO();
 
 
     public SocieteForm() {
@@ -28,8 +37,18 @@ public class SocieteForm extends JFrame {
         setDefaultCloseOperation(3);
         this.add(panel1);
         panel1.setVisible(true);
-        quitter.setVisible(true);
-        details.setVisible(true);
+        panel1.setLayout(new BorderLayout());
+
+        // Création des boutons Quitter et Détails
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        buttonDetails = new JButton("Détails");
+        buttonQuitter = new JButton("Quitter");
+        buttonPanel.add(buttonDetails);
+        buttonPanel.add(buttonQuitter);
+        panel1.add(buttonPanel, BorderLayout.SOUTH);
+
+        buttonDetails.setVisible(true);
+        buttonQuitter.setVisible(true);
     }
 
     public void ConfigurationTable(TypeSociete typeSociete) {
@@ -39,31 +58,34 @@ public class SocieteForm extends JFrame {
                 scrollPaneClient.setVisible(true);
                 scrollPanelProspect.setVisible(false);
                 tableProspect.setVisible(false);
-                panelQuitter.setVisible(true);
+                panel1.setVisible(true);
+
             }
             case PROSPECT -> {
                 tableProspect.setVisible(true);
                 scrollPanelProspect.setVisible(true);
                 tableClient.setVisible(false);
                 scrollPaneClient.setVisible(false);
-                panelQuitter.setVisible(true);
+                panel1.setVisible(true);
+
             }
         }
-    }}
+    }
 
-/**
-    public void remplirSociete(TypeSociete typeSociete) throws CollectionIllegalException {
+
+    public void remplirSociete(TypeSociete typeSociete) throws CollectionIllegalException, SQLException {
+
         switch (typeSociete) {
             case CLIENT -> {
                 ConfigurationTable(TypeSociete.CLIENT);
-                if (CollectClient.listClient != null && !CollectClient.listClient.isEmpty()) {
+                if ( clientDao.findAll(con) != null && !clientDao.findAll(con).isEmpty()) {
                     String[] tableBaseClient = {"identifiant", "Raison Sociale", "Num rue", "Nom rue", "Code Postal", "Ville", "Téléphone", "Adresse Mail", "Commentaire",
                             "Chiffre Affaire", "Nombre Employés"};
                     DefaultTableModel model = new DefaultTableModel();
                     for (String colonne : tableBaseClient) {
                         model.addColumn(colonne);
                     }
-                    for (Client client : CollectClient.listClient) {
+                    for (Client client : clientDao.findAll(con)) {
                         Object[] rowData = {
                                 client.getId(),
                                 client.getRaisonSociale(),
@@ -88,14 +110,14 @@ public class SocieteForm extends JFrame {
             }
             case PROSPECT -> {
                 ConfigurationTable(TypeSociete.PROSPECT);
-                if (CollectProspect.listProspect != null && !CollectProspect.listProspect.isEmpty()) {
-                    String[] tableBaseProspecteur = {"idendtifiant", "Raison Sociale", "Num de rue", "Nom de rue", "Code Postal", "Ville", "Téléphone", "Adresse Mail", "Commentaire",
+                if (prospectDAO.findAll(con) != null && !prospectDAO.findAll(con).isEmpty()) {
+                    String[] tableBaseProspecteur = {"identifiant", "Raison Sociale", "Num rue", "Nom rue", "Code Postal", "Ville", "Téléphone", "Adresse Mail", "Commentaire",
                             "Date Prospection", "Prospecteur Interessé"};
                     DefaultTableModel model1 = new DefaultTableModel();
                     for (String colonne : tableBaseProspecteur) {
                         model1.addColumn(colonne);
                     }
-                    for (Prospect prospect : CollectProspect.listProspect) {
+                    for (Prospect prospect : prospectDAO.findAll(con)) {
                         Object[] rowData = {
                                 prospect.getId(),
                                 prospect.getRaisonSociale(),
@@ -121,4 +143,3 @@ public class SocieteForm extends JFrame {
         }
     }
 }
-**/

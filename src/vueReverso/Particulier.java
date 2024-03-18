@@ -3,19 +3,21 @@ package vueReverso;
 import Enum.*;
 import ReversoException.CollectionIllegalException;
 import logiqueReverso.*;
+import DAO.Client_DAO;
+import DAO.ProspectDAO;
+import DAO.ConnexionDAO;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 import java.util.Objects;
 
 public class Particulier extends JFrame {
     Prospect prospect;
     Client  client;
 
-    int i;
 
-    int j;
     private final AccueilForm accueilForm;
     private JPanel panel1;
     private JTextField iden;
@@ -40,6 +42,9 @@ public class Particulier extends JFrame {
     private JLabel PrspInter;
     private JLabel ChffAffa;
     private JLabel NbrEmpl;
+    Client_DAO clientDao = new Client_DAO();
+    ProspectDAO prospectDAO = new ProspectDAO();
+    ConnexionDAO con = new ConnexionDAO();
 
 
     public Particulier(AccueilForm accueilForm) {
@@ -62,8 +67,8 @@ public class Particulier extends JFrame {
                 dispose();
             }
         });
-    }}
-    /**public void config(TypeSociete typeSociete, Crud crud) throws CollectionIllegalException {
+    }
+    public void config(TypeSociete typeSociete, Crud crud) throws CollectionIllegalException, SQLException {
 
         switch (typeSociete){
             case CLIENT -> {
@@ -193,7 +198,7 @@ public class Particulier extends JFrame {
             }
         }
     }
-    public void donneesSociete(Societe societe){
+    public void donneesSociete(Societe societe) {
         iden.setText(String.valueOf(societe.getId()));
         RaisonSociale.setText(societe.getRaisonSociale());
         NumDeRue.setText(societe.getNumRue());
@@ -204,25 +209,35 @@ public class Particulier extends JFrame {
         AdresseMail.setText(societe.getAdresseMail());
         Commentaire.setText(societe.getCommentaire());
     }
-    public void transfertDonnees(TypeSociete typeSociete) {
-        switch (typeSociete){
-            case CLIENT -> {
-                i = accueilForm.getComboBoxClient().getSelectedIndex();
-                    if (i >= 0) {
-                        Client client = CollectClient.listClient.get(i - 1);
-                        donneesSociete(client);
-                        chiffreAffaire.setText(String.valueOf(client.getChiffreAffaire()));
-                        nombreEmploye.setText(String.valueOf(client.getNombreEmployes()));
-                    }
+    public void transfertDonnees(TypeSociete typeSociete) throws SQLException {
 
+        switch (typeSociete) {
+            case CLIENT -> {
+                String selectedClientName = (String) accueilForm.getComboBoxClient().getSelectedItem();
+                int selectedIndex = accueilForm.getComboBoxClient().getSelectedIndex();
+                if (selectedIndex >= 0) {
+                    for (Client client : clientDao.findAll(con)) {
+                        if (client.getRaisonSociale().equals(selectedClientName)) {
+                            donneesSociete(client);
+                            chiffreAffaire.setText(String.valueOf(client.getChiffreAffaire()));
+                            nombreEmploye.setText(String.valueOf(client.getNombreEmployes()));
+                            break;
+                        }
+                    }
+                }
             }
+
             case PROSPECT -> {
-                j = accueilForm.getComboBoxProspect().getSelectedIndex();
-                if (j >= 0) {
-                    Prospect prospect = CollectProspect.listProspect.get(j-1);
-                    donneesSociete(prospect);
-                    dateProspect.setText(prospect.getDateProspect());
-                    prospectInteret2.setText(prospect.getProspectInteresse());
+                String selectedClientName = (String) accueilForm.getComboBoxProspect().getSelectedItem();
+                int selectedIndex = accueilForm.getComboBoxProspect().getSelectedIndex();
+                if (selectedIndex >= 0) {
+                    for (Prospect prospect : prospectDAO.findAll(con)) {
+                        if (prospect.getRaisonSociale().equals(selectedClientName)) {
+                            donneesSociete(prospect);
+                            dateProspect.setText(prospect.getDateProspect());
+                            prospectInteret2.setText(prospect.getProspectInteresse());
+                        }
+                    }
                 }
             }
         }
@@ -237,138 +252,203 @@ public class Particulier extends JFrame {
                 || Telephone.getText().isEmpty() || Telephone.getText() == null
                 || AdresseMail.getText().isEmpty() || AdresseMail.getText() == null
                 || Commentaire.getText().isEmpty() || Commentaire.getText() == null)
-                switch (typeSociete){
-                    case CLIENT -> {
-                        if (chiffreAffaire.getText().isEmpty() || chiffreAffaire.getText()== null
+            switch (typeSociete){
+                case CLIENT -> {
+                    if (chiffreAffaire.getText().isEmpty() || chiffreAffaire.getText()== null
                             ||nombreEmploye.getText().isEmpty() || nombreEmploye.getText() == null){
-                            JOptionPane.showConfirmDialog(null, "Tous les champs doivent être renseignés");
-                        }
-                    }
-                    case PROSPECT -> {
-                        if (dateProspect.getText().isEmpty() || dateProspect.getText() == null
-                            || prospectInteret2.getText().isEmpty() || prospectInteret2.getText() == null){
-                            JOptionPane.showConfirmDialog(null, "Tous les champs doivent être renseignés");
-                        }
+                        JOptionPane.showConfirmDialog(null, "Tous les champs doivent être renseignés");
                     }
                 }
+                case PROSPECT -> {
+                    if (dateProspect.getText().isEmpty() || dateProspect.getText() == null
+                            || prospectInteret2.getText().isEmpty() || prospectInteret2.getText() == null){
+                        JOptionPane.showConfirmDialog(null, "Tous les champs doivent être renseignés");
+                    }
+                }
+            }
         {
         }
         return false;
     }
-  /**  public void AjouterClientProspect(TypeSociete typeSociete) throws IllegalArgumentException {
+    public void AjouterClientProspect(TypeSociete typeSociete) throws IllegalArgumentException, SQLException {
         switch (typeSociete) {
             case CLIENT -> {
-                if (Objects.equals(client, new Client())) {
-                    client.setId(CollectClient.listClient.size()+1);
+                if (client.getChiffreAffaire() != Double.parseDouble(chiffreAffaire.getText())) {
+                    JOptionPane.showConfirmDialog(null, "le format du CA n'est pas correct");
                 }
-                if (client.getChiffreAffaire() != Double.parseDouble(chiffreAffaire.getText())){
-                        JOptionPane.showConfirmDialog(null, "le format du CA n'est pas correct");
+
+                // Récupérer les valeurs des champs Swing pour créer un nouveau client
+                String raison_sociale = RaisonSociale.getText();
+                String num_rue = NumDeRue.getText();
+                String nom_rue = NomDeRue.getText();
+                String code_postal = CodePostal.getText();
+                String ville = Ville.getText();
+                String telephone = Telephone.getText();
+                String adresse_mail = AdresseMail.getText();
+                String commentaire = Commentaire.getText();
+                double chiffre_affaire = Double.parseDouble(chiffreAffaire.getText());
+                int nombre_employe = Integer.parseInt(nombreEmploye.getText());
+
+                // Créer un nouvel objet Client avec ces valeurs
+                Client newClient = new Client(
+                        Integer.parseInt(iden.getText()), // Assurez-vous que iden.getText() renvoie bien un identifiant valide
+                        raison_sociale,
+                        num_rue,
+                        nom_rue,
+                        code_postal,
+                        ville,
+                        telephone,
+                        adresse_mail,
+                        commentaire,
+                        chiffre_affaire,
+                        nombre_employe
+                );
+
+                // Appeler la méthode create du DAO de client en passant le nouvel objet Client
+                try {
+                    clientDao.create(con, newClient);
+                } catch (SQLException e) {
+                    // Gérer les exceptions ici
                 }
-                    CollectClient.listClient.add(
-                            new Client(
-                                    Integer.parseInt(iden.getText()),
-                                    RaisonSociale.getText(),
-                                    NumDeRue.getText(),
-                                    NomDeRue.getText(),
-                                    CodePostal.getText(),
-                                    Ville.getText(),
-                                    Telephone.getText(),
-                                    AdresseMail.getText(),
-                                    Commentaire.getText(),
-                                    Double.parseDouble(chiffreAffaire.getText()),
-                                    Integer.parseInt(nombreEmploye.getText())
-                            )
+            }
+            case PROSPECT -> {
+                if (Objects.equals(prospect, new Prospect())) {
+                    prospect.setId(prospectDAO.findAll(con).lastIndexOf(prospect)+1);
+                }
+                try {
+                    // Récupérer les valeurs des champs Swing pour créer un nouveau prospect
+                    String raison_sociale = RaisonSociale.getText();
+                    String num_rue = NumDeRue.getText();
+                    String nom_rue = NomDeRue.getText();
+                    String code_postal = CodePostal.getText();
+                    String ville = Ville.getText();
+                    String telephone = Telephone.getText();
+                    String adresse_mail = AdresseMail.getText();
+                    String commentaire = Commentaire.getText();
+                    String date_prospect = dateProspect.getText();
+                    String prospect_interess = prospectInteret2.getText();
+
+                    // Créer un nouvel objet Prospect avec ces valeurs
+                    Prospect newProspect = new Prospect(
+                            Integer.parseInt(iden.getText()), // Assurez-vous que iden.getText() renvoie bien un identifiant valide
+                            raison_sociale,
+                            num_rue,
+                            nom_rue,
+                            code_postal,
+                            ville,
+                            telephone,
+                            adresse_mail,
+                            commentaire,
+                            date_prospect,
+                            prospect_interess
                     );
-                    }
-            case PROSPECT -> {
-                   if (Objects.equals(prospect, new Prospect())) {
-                       prospect.setId(CollectProspect.listProspect.size() + 1);
-                   }
-                   try {
-                       CollectProspect.listProspect.add(
-                               new Prospect(
-                                       Integer.parseInt(iden.getText()),
-                                       RaisonSociale.getText(),
-                                       NumDeRue.getText(),
-                                       NomDeRue.getText(),
-                                       CodePostal.getText(),
-                                       Ville.getText(),
-                                       Telephone.getText(),
-                                       AdresseMail.getText(),
-                                       Commentaire.getText(),
-                                       dateProspect.getText(),
-                                       prospectInteret2.getText()
-                               )
-                       );
-                   }catch (NumberFormatException nfe){
-                       JOptionPane.showConfirmDialog(null,"le format du nombre entré n'est pas correct");
-                   }
+
+                    // Appeler la méthode create du DAO de prospect en passant le nouvel objet Prospect
+                    prospectDAO.create(con, newProspect);
+                } catch (NumberFormatException nfe) {
+                    JOptionPane.showConfirmDialog(null, "le format du nombre entré n'est pas correct");
+                } catch (SQLException e) {
+                    // Gérer les exceptions ici
+                }
             }
         }
     }
-    public void SupCliPros(TypeSociete typeSociete){
-        switch (typeSociete){
+    public void SupCliPros(TypeSociete typeSociete) throws SQLException {
+        switch (typeSociete) {
             case CLIENT -> {
-                i = accueilForm.getComboBoxClient().getSelectedIndex();
-                CollectClient.listClient.remove(i-1);
+                String selectedClientName = (String) accueilForm.getComboBoxClient().getSelectedItem();
+                int selectedIndex = accueilForm.getComboBoxClient().getSelectedIndex();
+                if (selectedIndex >= 0) {
+                    Client client = clientDao.find(con, selectedIndex); // Récupérer le client à partir de l'index
+                    if (client != null && client.getRaisonSociale().equals(selectedClientName)) {
+                        clientDao.delete(con, client); // Supprimer le client récupéré
+                    }
+                }
             }
             case PROSPECT -> {
-                j = accueilForm.getComboBoxProspect().getSelectedIndex();
-                CollectProspect.listProspect.remove(j-1);
+                String selectedProspectName = (String) accueilForm.getComboBoxProspect().getSelectedItem();
+                int selectedProspectIndex = accueilForm.getComboBoxProspect().getSelectedIndex();
+                if (selectedProspectIndex >= 0) {
+                    Prospect prospect = prospectDAO.find(con, selectedProspectIndex); // Récupérer le prospect à partir de l'index
+                    if (prospect != null && prospect.getRaisonSociale().equals(selectedProspectName)) {
+                        prospectDAO.delete(con, prospect); // Supprimer le prospect récupéré
+                    }
+                }
             }
         }
     }
-    public void valider(TypeSociete typeSociete, Crud crud) throws CollectionIllegalException{
+
+    public void valider(TypeSociete typeSociete, Crud crud) {
         Ok.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (verif(typeSociete)){
-                dispose();
+                if (!verif(typeSociete)) {
+                    return; // Si la vérification échoue, quitter la méthode
+                }
+
+                try {
+                    new SocieteForm().remplirSociete(typeSociete);
+                } catch (CollectionIllegalException | SQLException ex) {
+                    JOptionPane.showMessageDialog(null, "Problème au niveau des Collections", "Erreur", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
                 switch (typeSociete) {
                     case CLIENT -> {
-                        try {
-                            new SocieteForm().remplirSociete(TypeSociete.CLIENT);
-                        } catch (CollectionIllegalException ex) {
-                            JOptionPane.showConfirmDialog(null,"Problème  au niveau des Collections");
-                        }
                         switch (crud) {
                             case AJOUTER -> {
-                                AjouterClientProspect(TypeSociete.CLIENT);
+                                try {
+                                    AjouterClientProspect(TypeSociete.CLIENT);
+                                } catch (SQLException ex) {
+                                    JOptionPane.showMessageDialog(null, "Erreur lors de l'ajout du client", "Erreur", JOptionPane.ERROR_MESSAGE);
+                                }
                             }
                             case MODIFIER -> {
-                                AjouterClientProspect(TypeSociete.CLIENT);
-                                SupCliPros(TypeSociete.CLIENT);
+                                try {
+                                    AjouterClientProspect(TypeSociete.CLIENT);
+                                    SupCliPros(TypeSociete.CLIENT);
+                                } catch (SQLException ex) {
+                                    JOptionPane.showMessageDialog(null, "Erreur lors de la modification du client", "Erreur", JOptionPane.ERROR_MESSAGE);
+                                }
                             }
                             case SUPPRIMER -> {
-                                SupCliPros(TypeSociete.CLIENT);
+                                try {
+                                    SupCliPros(TypeSociete.CLIENT);
+                                } catch (SQLException ex) {
+                                    JOptionPane.showMessageDialog(null, "Erreur lors de la suppression du client", "Erreur", JOptionPane.ERROR_MESSAGE);
+                                }
                             }
                         }
                     }
                     case PROSPECT -> {
-                        try {
-                            new SocieteForm().remplirSociete(TypeSociete.PROSPECT);
-                        } catch (CollectionIllegalException ex) {
-                            JOptionPane.showConfirmDialog(null,"Problème  au niveau des Collections");
-                        }
                         switch (crud) {
                             case AJOUTER -> {
-                                AjouterClientProspect(TypeSociete.PROSPECT);
+                                try {
+                                    AjouterClientProspect(TypeSociete.PROSPECT);
+                                } catch (SQLException ex) {
+                                    JOptionPane.showMessageDialog(null, "Erreur lors de l'ajout du prospect", "Erreur", JOptionPane.ERROR_MESSAGE);
+                                }
                             }
                             case MODIFIER -> {
-                                AjouterClientProspect(TypeSociete.PROSPECT);
-                                SupCliPros(TypeSociete.PROSPECT);
+                                try {
+                                    AjouterClientProspect(TypeSociete.PROSPECT);
+                                    SupCliPros(TypeSociete.PROSPECT);
+                                } catch (SQLException ex) {
+                                    JOptionPane.showMessageDialog(null, "Erreur lors de la modification du prospect", "Erreur", JOptionPane.ERROR_MESSAGE);
+                                }
                             }
                             case SUPPRIMER -> {
-                                SupCliPros(TypeSociete.PROSPECT);
+                                try {
+                                    SupCliPros(TypeSociete.PROSPECT);
+                                } catch (SQLException ex) {
+                                    JOptionPane.showMessageDialog(null, "Erreur lors de la suppression du prospect", "Erreur", JOptionPane.ERROR_MESSAGE);
+                                }
                             }
                         }
                     }
-                }
-            }else {
-                    JOptionPane.showConfirmDialog(null, "Tous les champs doivent être renseignés");
                 }
             }
         });
     }
 }
-     **/
+
