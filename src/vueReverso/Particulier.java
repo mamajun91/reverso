@@ -68,6 +68,15 @@ public class Particulier extends JFrame {
             }
         });
     }
+
+    /**
+     * Configure l'interface en fonction du type de société et de l'action à effectuer, puis valide l'action.
+     *
+     * @param typeSociete Le type de société (client ou prospect).
+     * @param crud L'action à effectuer (ajouter, modifier ou supprimer).
+     * @throws CollectionIllegalException Si une opération illégale est tentée sur une collection.
+     * @throws SQLException si une erreur SQL se produit lors de l'accès à la base de données.
+     */
     public void config(TypeSociete typeSociete, Crud crud) throws CollectionIllegalException, SQLException {
 
         switch (typeSociete){
@@ -110,6 +119,11 @@ public class Particulier extends JFrame {
         }
     }
 
+    /**
+     * Active ou désactive les champs de saisie pour les données de la société en fonction du paramètre spécifié.
+     *
+     * @param enable true pour activer les champs, false pour les désactiver.
+     */
     public void enableFields(boolean enable) {
         RaisonSociale.setEditable(enable);
         NumDeRue.setEditable(enable);
@@ -120,6 +134,12 @@ public class Particulier extends JFrame {
         AdresseMail.setEditable(enable);
         Commentaire.setEditable(enable);
     }
+
+    /**
+     * Active ou désactive les champs de saisie pour les données du client en fonction de l'opération CRUD spécifiée.
+     *
+     * @param crud L'opération CRUD à effectuer (AJOUTER, SUPPRIMER).
+     */
     public void enableClientFields(Crud crud) {
         switch (crud){
             case AJOUTER -> {
@@ -132,6 +152,12 @@ public class Particulier extends JFrame {
             }
         }
     }
+
+    /**
+     * Active ou désactive les champs de saisie pour les données du prospect en fonction de l'opération CRUD spécifiée.
+     *
+     * @param crud L'opération CRUD à effectuer (AJOUTER, SUPPRIMER).
+     */
     public void enableProspectFields(Crud crud) {
         switch (crud){
             case AJOUTER -> {
@@ -144,6 +170,13 @@ public class Particulier extends JFrame {
             }
         }
     }
+
+    /**
+     * Configure l'interface utilisateur pour l'ajout, la modification ou la suppression d'une société selon le type spécifié.
+     *
+     * @param crud L'action CRUD à effectuer (AJOUTER, MODIFIER ou SUPPRIMER).
+     * @param typeSociete Le type de société (CLIENT ou PROSPECT).
+     */
     public void configAjouter(Crud crud, TypeSociete typeSociete) {
         switch (typeSociete) {
             case CLIENT -> {
@@ -198,6 +231,12 @@ public class Particulier extends JFrame {
             }
         }
     }
+
+    /**
+     * Remplit les champs de l'interface utilisateur avec les données de la société fournie.
+     *
+     * @param societe La société dont les données doivent être affichées dans les champs de l'interface utilisateur.
+     */
     public void donneesSociete(Societe societe) {
         iden.setText(String.valueOf(societe.getId()));
         RaisonSociale.setText(societe.getRaisonSociale());
@@ -209,8 +248,14 @@ public class Particulier extends JFrame {
         AdresseMail.setText(societe.getAdresseMail());
         Commentaire.setText(societe.getCommentaire());
     }
-    public void transfertDonnees(TypeSociete typeSociete) throws SQLException {
 
+    /**
+     * Transfère les données de la société sélectionnée dans les champs correspondants.
+     *
+     * @param typeSociete Le type de société dont les données doivent être transférées (CLIENT ou PROSPECT).
+     * @throws SQLException Une exception SQL en cas d'erreur lors de l'accès à la base de données.
+     */
+    public void transfertDonnees(TypeSociete typeSociete) throws SQLException {
         switch (typeSociete) {
             case CLIENT -> {
                 String selectedClientName = (String) accueilForm.getComboBoxClient().getSelectedItem();
@@ -242,6 +287,13 @@ public class Particulier extends JFrame {
             }
         }
     }
+
+    /**
+     * Vérifie si tous les champs requis sont remplis en fonction du type de société spécifié.
+     *
+     * @param typeSociete Le type de société concerné (CLIENT ou PROSPECT).
+     * @return true si tous les champs sont remplis, false sinon.
+     */
     public Boolean verif(TypeSociete typeSociete){
         if (       iden.getText().isEmpty()
                 || RaisonSociale.getText().isEmpty() || RaisonSociale.getText() == null
@@ -270,6 +322,14 @@ public class Particulier extends JFrame {
         }
         return false;
     }
+
+    /**
+     * Méthode AjouterClientProspect permettant d'ajouter un nouveau client ou prospect en fonction du type spécifié.
+     *
+     * @param typeSociete Le type de société concerné (CLIENT ou PROSPECT).
+     * @throws IllegalArgumentException Lancée si le format des données est incorrect.
+     * @throws SQLException              Lancée en cas d'erreur lors de l'accès à la base de données.
+     */
     public void AjouterClientProspect(TypeSociete typeSociete) throws IllegalArgumentException, SQLException {
         switch (typeSociete) {
             case CLIENT -> {
@@ -353,6 +413,13 @@ public class Particulier extends JFrame {
             }
         }
     }
+
+    /**
+     * Méthode SupCliPros permettant de supprimer un client ou un prospect en fonction du type spécifié.
+     *
+     * @param typeSociete Le type de société concerné (CLIENT ou PROSPECT).
+     * @throws SQLException Lancée en cas d'erreur lors de l'accès à la base de données.
+     */
     public void SupCliPros(TypeSociete typeSociete) throws SQLException {
         switch (typeSociete) {
             case CLIENT -> {
@@ -378,6 +445,13 @@ public class Particulier extends JFrame {
         }
     }
 
+    /**
+     * Méthode valider permettant de gérer l'action de validation des données
+     * d'une société en fonction du type de société et de l'opération CRUD spécifiés.
+     *
+     * @param typeSociete Le type de société concerné (CLIENT ou PROSPECT).
+     * @param crud L'opération CRUD à effectuer (AJOUTER, MODIFIER ou SUPPRIMER).
+     */
     public void valider(TypeSociete typeSociete, Crud crud) {
         Ok.addActionListener(new ActionListener() {
             @Override
