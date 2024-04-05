@@ -14,8 +14,9 @@ import java.util.logging.Level;
 import static log.LogReverso.LOGGER;
 
 public class ProspectDAO {
+    int id_societe;
     private void findAllOne(Prospect prospect, ResultSet rs) throws SQLException {
-       prospect.setId(rs.getInt("id_societe"));
+
        prospect.setRaisonSociale(rs.getString("raison_sociale"));
        prospect.setNumRue(rs.getString("num_rue"));
        prospect.setNomRue(rs.getString("nom_rue"));
@@ -87,18 +88,23 @@ public class ProspectDAO {
                 "VALUES (LAST_INSERT_ID(), ?, ?) ";
         return getProspects(con, querySociete, queryProspect);
     }
-    public Prospect update(ConnexionDAO con, int id_societe) throws Dbexception, SQLException {
+    public Prospect update(ConnexionDAO con, Prospect newProspect) throws Dbexception, SQLException {
+        String querySociete = "UPDATE reverso.societe " +
+                "SET raison_sociale = ?, num_rue = ?, nom_rue = ?, code_postal = ?, ville = ?, telephone = ?, adresse_mail = ?, commentaire = ? " +
+                "WHERE id_societe = ? ";
         String queryProspect = "UPDATE reverso.prospect " +
                 "SET date_prospect=? " +
                 "WHERE id_societe = id_societe ";
-        Prospect prospect = find(con, id_societe);
-        try (PreparedStatement stmtProspect = con.getConnection().prepareStatement(queryProspect)) {
-            stmtProspect.executeUpdate();
+        newProspect = find(con, id_societe);
+        try (PreparedStatement stmtSociete = con.getConnection().prepareStatement(querySociete);
+             PreparedStatement stmtClient = con.getConnection().prepareStatement(queryProspect)) {
+            stmtSociete.executeUpdate();
+            stmtClient.executeUpdate();
         } catch (SQLException e) {
-            LOGGER.log(Level.parse("error"), e.getMessage());
+            LOGGER.log(Level.parse("error"),e.getMessage());
             throw new RuntimeException(e);
         }
-        return prospect;
+        return newProspect;
     }
     public ArrayList<Prospect> delete(ConnexionDAO con, Prospect id_societe) throws SQLException {
         Statement stmt = null;

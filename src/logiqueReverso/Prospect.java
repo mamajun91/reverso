@@ -10,10 +10,10 @@ public class Prospect extends Societe{
     public Prospect() {
     }
 
-    public Prospect(int id, String raisonSociale, String numRue, String nomRue, String codePostal,
+    public Prospect(String raisonSociale, String numRue, String nomRue, String codePostal,
                     String ville, String telephone, String adresseMail, String commentaire,
                     String dateProspect, String prospectInteresse) {
-        super(id, raisonSociale, numRue, nomRue, codePostal, ville, telephone, adresseMail, commentaire);
+        super(raisonSociale, numRue, nomRue, codePostal, ville, telephone, adresseMail, commentaire);
         this.setDateProspect(dateProspect);
         this.setProspectInteresse(prospectInteresse);
     }

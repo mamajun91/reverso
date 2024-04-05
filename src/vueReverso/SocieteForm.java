@@ -87,7 +87,7 @@ public class SocieteForm extends JFrame {
                     }
                     for (Client client : clientDao.findAll(con)) {
                         Object[] rowData = {
-                                client.getId(),
+
                                 client.getRaisonSociale(),
                                 client.getNumRue(),
                                 client.getNomRue(),
@@ -119,7 +119,7 @@ public class SocieteForm extends JFrame {
                     }
                     for (Prospect prospect : prospectDAO.findAll(con)) {
                         Object[] rowData = {
-                                prospect.getId(),
+
                                 prospect.getRaisonSociale(),
                                 prospect.getNumRue(),
                                 prospect.getNomRue(),

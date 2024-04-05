@@ -8,10 +8,10 @@ public class Client extends Societe{
     public Client() {
     }
 
-    public Client(int id, String raisonSociale, String numRue, String nomRue, String codePostal,
+    public Client(String raisonSociale, String numRue, String nomRue, String codePostal,
                   String ville, String telephone, String adresseMail, String commentaire,
                   Double chiffreAffaire, int nombreEmployes) {
-        super(id, raisonSociale, numRue, nomRue, codePostal, ville, telephone, adresseMail, commentaire);
+        super(raisonSociale, numRue, nomRue, codePostal, ville, telephone, adresseMail, commentaire);
 
 
         this.setChiffreAffaire(chiffreAffaire);

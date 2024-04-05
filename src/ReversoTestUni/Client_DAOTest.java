@@ -40,7 +40,7 @@ class Client_DAOTest extends Prospect {
         ConnexionDAO con = new ConnexionDAO();
 
         // Obtenir un objet Client à mettre à jour
-        Client res = clicli.update(con,1);
+        Client res = clicli.update(con,clicli.find(con,1));
 
         System.out.println(res);
     }

@@ -19,12 +19,12 @@ public abstract class Societe {
 
     public Societe() {}
 
-    public Societe(int id, String raisonSociale, String numRue, String nomRue, String codePostal, String ville,
+    public Societe( String raisonSociale, String numRue, String nomRue, String codePostal, String ville,
                    String telephone,
                    String adresseMail,
                    String commentaire) {
 
-        this.setId(id);
+
         this.setRaisonSociale(raisonSociale);
         this.setNumRue(numRue);
         this.setNomRue(nomRue);
@@ -35,12 +35,9 @@ public abstract class Societe {
         this.setCommentaire(commentaire);
     }
 
-    public int getId() { return id;}
 
-    public void setId(int id) {
-        this.id=id;
 
-    }
+
 
     public String getRaisonSociale() {
         return raisonSociale;

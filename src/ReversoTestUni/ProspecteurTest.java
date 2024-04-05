@@ -31,7 +31,7 @@ class ProspecteurTest extends Prospect {
         ConnexionDAO con = new ConnexionDAO();
 
         // Obtenir un objet Client à mettre à jour
-        Prospect res = prospectDAO.update(con,3);
+        Prospect res = prospectDAO.update(con, prospectDAO.find(con,1));
 
         System.out.println(res);
     }
