@@ -38,9 +38,9 @@ public class ProspectDAO {
             stmt = con.getConnection().createStatement();
             ResultSet rs = stmt.executeQuery(query);
             while (rs.next()) {
-                Prospect prospect = new Prospect(); // Créez une nouvelle instance à chaque itération
-                findAllOne(prospect, rs); // Remplissez cette instance avec les données actuelles
-                prospects.add(prospect); // Ajoutez cette instance à la liste des clients
+                Prospect prospect = new Prospect(); 
+                findAllOne(prospect, rs); 
+                prospects.add(prospect);
             }
             rs.close();
         } catch (SQLException | Dbexception e) {
