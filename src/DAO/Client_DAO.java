@@ -13,8 +13,6 @@ import static log.LogReverso.LOGGER;
 
 public class Client_DAO {
 
-    // Cette variable ne semble pas utilisée dans votre classe, vous pouvez la supprimer.
-    // int id_client;
 
     // Méthode pour remplir un objet Client avec les données d'un ResultSet
     private static void fillClientData(Client client, ResultSet rs) throws SQLException {
